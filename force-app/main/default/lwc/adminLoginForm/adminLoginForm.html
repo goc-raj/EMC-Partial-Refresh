@@ -1,0 +1,37 @@
+<template>
+    <div class="login-form-container">
+        <p class="headerText">Welcome Back!</p>
+        <p class="errorText"></p>
+        <div class="input-area-container slds-grid slds-wrap slds-gutters">
+            <div class="slds-col slds-size_1-of-1">
+                <div class="field-container1">
+                    <input type="text" value={inputFields.email} class="slds-input field-input" name="email" placeholder="Work email address" autocomplete="off" onchange={handleInputChange} onfocusout={handleFocusOut} onfocus={handleFocus} />
+                </div>
+            </div>
+            <div class="slds-col slds-size_1-of-1">
+                <div class="field-container2">
+                    <template lwc:if={hidePassword}>
+                        <input class="slds-input field-input" value={inputFields.passwd} type="password" name="passwd" placeholder="Password" autocomplete="off" onchange={handleInputChange} onfocusout={handleFocusOut} onfocus={handleFocus} />
+                        <a class="input-button" data-toggle="true">
+                            <lightning-icon icon-name="utility:hide" size="x-small" class="advance-search_icon slds-p-right_small" onclick={handleShowHidePassword}>
+                            </lightning-icon>
+                        </a>
+                    </template>
+                    <template lwc:else>
+                        <input class="slds-input field-input" value={inputFields.passwd} type="text" name="passwd" placeholder="Password" autocomplete="off" onchange={handleInputChange} onfocusout={handleFocusOut} onfocus={handleFocus} />
+                        <a class="input-button" data-toggle="true">
+                            <lightning-icon icon-name="utility:preview" size="x-small" class="advance-search_icon slds-p-right_small" onclick={handleShowHidePassword}>
+                            </lightning-icon>
+                        </a>
+                    </template>
+                </div>
+            </div>
+            <div class="slds-col slds-size_1-of-1">
+                <button class="submitButton" onclick={handleLogin}>Log in</button>
+            </div>
+            <div class="slds-col slds-size_1-of-1">
+                <button class="passwdButton" onclick={handleForgotPasswd}>Forgot password?</button>
+            </div>
+        </div>
+    </div>
+</template>

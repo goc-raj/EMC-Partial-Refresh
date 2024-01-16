@@ -1,0 +1,23 @@
+:host{
+    --brand-green: #7abb4a;
+    --brand-red: #FA7800;
+}
+
+h1, h2, h3, h4{
+    font-size: 16px;
+}
+
+h1{
+    font-family: var(--dxp-g-text-bold-font);
+    color: var(--brand-green);
+}
+
+h2, h3{
+    font-family: var(--dxp-g-text-semi-bold-font);
+    color: var(--brand-red);
+}
+
+h4{
+    font-family: var(--dxp-g-root-font-family);
+    color: var(--dxp-g-neutral);
+}

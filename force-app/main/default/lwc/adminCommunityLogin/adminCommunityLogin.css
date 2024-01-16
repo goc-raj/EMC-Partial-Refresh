@@ -1,0 +1,56 @@
+/* :host {
+    margin: 0;
+} */
+
+.main-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 99.85vh;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.sub-container {
+    background-color: white;
+    padding: 25px;
+    border: 1px solid #E0DBDB;
+    border-radius: 20px;
+    height: 550px;
+    width: 600px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.eExpLogo {
+    margin-top: 40px;
+    text-align: center;
+    color: #909090;
+    font-family: 'Proxima Nova' !important;
+    font-size: 15px;
+}
+
+
+/* Responsive styles for different devices */
+
+@media only screen and (max-width: 768px) {
+    /* Styles for tablet devices */
+    .sub-container {
+        width: 80%;
+    }
+}
+
+@media only screen and (max-width: 425px) {
+    /* Styles for mobile devices */
+    .sub-container {
+        width: 90%;
+        height: 450px;
+    }
+    .mBurseImage {
+        height: 50px;
+        margin-bottom: 20px;
+    }
+}

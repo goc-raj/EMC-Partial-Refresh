@@ -1,0 +1,15 @@
+<template>
+    <div class="fpasswd-form-container">
+        <p class="headerText">Forgot Password?</p>
+        <div class="input-area-container slds-grid slds-wrap slds-gutters">
+            <div class="slds-col slds-size_1-of-1">
+                <div class="field-container">
+                    <input type="text" value={email} class="slds-input field-input" name="email" placeholder="Work email address" autocomplete="off" onchange={handleEmailChange} onfocusout={handleFocusOut} onfocus={handleFocus} />
+                </div>
+            </div>
+            <div class="slds-col slds-size_1-of-1">
+                <button class="submitButton" onclick={handlePasswd}>Submit</button>
+            </div>
+        </div>
+    </div>
+</template>

@@ -1,0 +1,212 @@
+<template>
+    <table class="slds-table slds-table--header-fixed slds-table_cell-buffer slds-table_fixed-layout slds-max-medium-table_stacked-horizontal slds-table_striped">
+            <tr class="slds-line-height_reset">
+                <th class="" scope="col" style="width: 2.25rem;">
+                    <div class="slds-th__action slds-th__action_form">
+                        <div class="slds-checkbox">
+                            <input type="checkbox" class="CheckUncheckAll" name="options" id="checkbox-unique-id-1173"
+                                value="checkbox-unique-id-1173" tabindex="0"
+                                aria-labelledby="check-select-all-label column-group-header"
+                              />
+                            <label class="slds-checkbox__label" for="checkbox-unique-id-1173"
+                                id="check-select-all-label">
+                                <span class="slds-checkbox_faux"></span>
+                                <span class="slds-form-element__label slds-assistive-text">Select All</span>
+                            </label>
+                        </div>
+                    </div>
+                </th>
+                <th class="" scope="col" style="width: 2.25rem;">
+
+                </th>
+                <th class="" scope="col" style="width: 3.25rem;">
+                </th>
+                <th class="" scope="col" style="width: 9rem;" >
+                    <div class="slds-truncate tooltip-ex">Date & Time
+                        <span class="tooltip-ex-text tooltip-ex-bottom">Click To Sort</span>
+                        <span
+                            class="slds-icon_container slds-icon-utility-up slds-icon-utility-down slds-float_right slds-sort-icons">
+                                <lightning-icon icon-name="utility:chevronup" alternative-text="sort" size="x-small"
+                                    class="chevronup-icon">
+                                </lightning-icon>
+                           
+                                <lightning-icon icon-name="utility:chevrondown" alternative-text="sort" size="x-small"
+                                    class="chevrondown-icon">
+                                </lightning-icon>
+                        </span></div>
+                </th>
+                <th class="" scope="col" style="width: 10rem;" >
+                    <div class="slds-truncate  tooltip-ex">Driver
+                        <span class="tooltip-ex-text tooltip-ex-bottom">Click To Sort</span>
+                        <span
+                            class="slds-icon_container slds-icon-utility-up slds-icon-utility-down slds-float_right slds-sort-icons">
+                            <template if:false={reverse}>
+                                <lightning-icon icon-name="utility:chevronup" alternative-text="sort" size="x-small"
+                                    class="chevronup-icon">
+                                </lightning-icon>
+                            </template>
+                            <template if:true={reverse}>
+                                <lightning-icon icon-name="utility:chevrondown" alternative-text="sort" size="x-small"
+                                    class="chevrondown-icon">
+                                </lightning-icon>
+                            </template>
+                        </span>
+                    </div>
+                </th>
+                <th class="" scope="col" style="width: 7rem;" >
+                    <div class="slds-truncate tooltip-ex">Mileage
+                        <span class="tooltip-ex-text tooltip-ex-bottom">Click To Sort</span>
+                        <span
+                            class="slds-icon_container slds-icon-utility-up slds-icon-utility-down slds-float_right slds-sort-icons">
+                            <template if:false={reverse}>
+                                <lightning-icon icon-name="utility:chevronup" alternative-text="sort" size="x-small"
+                                    class="chevronup-icon">
+                                </lightning-icon>
+                            </template>
+                            <template if:true={reverse}>
+                                <lightning-icon icon-name="utility:chevrondown" alternative-text="sort" size="x-small"
+                                    class="chevrondown-icon">
+                                </lightning-icon>
+                            </template>
+                        </span></div>
+                </th>
+                <th class="" scope="col" >
+                    <div class="slds-truncate tooltip-ex">From
+                        <span class="tooltip-ex-text tooltip-ex-bottom">Click To Sort</span>
+                        <span
+                            class="slds-icon_container slds-icon-utility-up slds-icon-utility-down slds-float_right slds-sort-icons">
+                            <template if:false={reverse}>
+                                <lightning-icon icon-name="utility:chevronup" alternative-text="sort" size="x-small"
+                                    class="chevronup-icon">
+                                </lightning-icon>
+                            </template>
+                            <template if:true={reverse}>
+                                <lightning-icon icon-name="utility:chevrondown" alternative-text="sort" size="x-small"
+                                    class="chevrondown-icon">
+                                </lightning-icon>
+                            </template>
+                        </span></div>
+                </th>
+                <th class="" scope="col" >
+                    <div class="slds-truncate tooltip-ex">To
+                        <span class="tooltip-ex-text tooltip-ex-bottom">Click To Sort</span>
+                        <span
+                            class="slds-icon_container slds-icon-utility-up slds-icon-utility-down slds-float_right slds-sort-icons">
+                            <template if:false={reverse}>
+                                <lightning-icon icon-name="utility:chevronup" alternative-text="sort" size="x-small"
+                                    class="chevronup-icon">
+                                </lightning-icon>
+                            </template>
+                            <template if:true={reverse}>
+                                <lightning-icon icon-name="utility:chevrondown" alternative-text="sort" size="x-small"
+                                    class="chevrondown-icon">
+                                </lightning-icon>
+                            </template>
+                        </span></div>
+                </th>
+                <th class="" scope="col" style="width: 5rem;" >
+                    <div class="slds-truncate tooltip-ex">Tags
+                        <span class="tooltip-ex-text tooltip-ex-bottom">Click To Sort</span>
+                        <span
+                            class="slds-icon_container slds-icon-utility-up slds-icon-utility-down slds-float_right slds-sort-icons">
+                            <template if:false={reverse}>
+                                <lightning-icon icon-name="utility:chevronup" alternative-text="sort" size="x-small"
+                                    class="chevronup-icon">
+                                </lightning-icon>
+                            </template>
+                            <template if:true={reverse}>
+                                <lightning-icon icon-name="utility:chevrondown" alternative-text="sort" size="x-small"
+                                    class="chevrondown-icon">
+                                </lightning-icon>
+                            </template>
+                        </span></div>
+                </th>
+                <th class="" scope="col" style="width: 6rem;" >
+                    <div class="slds-truncate tooltip-ex">Notes
+                        <span class="tooltip-ex-text tooltip-ex-bottom">Click To Sort</span>
+                        <span
+                            class="slds-icon_container slds-icon-utility-up slds-icon-utility-down slds-float_right slds-sort-icons">
+                            <template if:false={reverse}>
+                                <lightning-icon icon-name="utility:chevronup" alternative-text="sort" size="x-small"
+                                    class="chevronup-icon">
+                                </lightning-icon>
+                            </template>
+                            <template if:true={reverse}>
+                                <lightning-icon icon-name="utility:chevrondown" alternative-text="sort" size="x-small"
+                                    class="chevrondown-icon">
+                                </lightning-icon>
+                            </template>
+                        </span></div>
+                </th>
+                <th class="" scope="col" style="width: 6rem;" >
+                    <div class="slds-truncate tooltip-ex">Activity
+                        <span class="tooltip-ex-text tooltip-ex-bottom">Click To Sort</span>
+                        <span
+                            class="slds-icon_container slds-icon-utility-up slds-icon-utility-down slds-float_right slds-sort-icons">
+                            <template if:false={reverse}>
+                                <lightning-icon icon-name="utility:chevronup" alternative-text="sort" size="x-small"
+                                    class="chevronup-icon">
+                                </lightning-icon>
+                            </template>
+                            <template if:true={reverse}>
+                                <lightning-icon icon-name="utility:chevrondown" alternative-text="sort" size="x-small"
+                                    class="chevrondown-icon">
+                                </lightning-icon>
+                            </template>
+                        </span></div>
+                </th>
+            </tr>
+            <template for:each={currentData} for:item="tableData" for:index="index">
+                <tr id={tableData.Id} key={tableData.Id} data-id={tableData.Id}
+                    class="collapsible">
+                    <td>
+                        <div class="slds-checkbox">
+                            <input type="checkbox" name="options" id={tableData.Id} data-id={tableData.Id}
+                                class="checkboxCheckUncheck" value="checkbox-unique-id-1173" tabindex="0"
+                                aria-labelledby="check-select-all-label column-group-header" />
+                            <label class="slds-checkbox__label" for={tableData.Id}>
+                                <span class="slds-checkbox_faux"></span>
+                            </label>
+                        </div>
+                    </td>
+                    <td>
+                        <lightning-icon class="slds-icon-text-default ms-help-icon" id={tableData.Id}
+                            data-id={tableData.Id} size="x-small" icon-name="utility:checkin"
+                            ></lightning-icon>
+                    </td>
+                    <td>
+                        <img src={statusAppImg} width="17" height="17" data-id={tableData.Id}
+                            class="statusApImage">
+
+                        <img src={statusRejImg} width="17" height="17" data-id={tableData.Id}
+                            class="statusRejImage">
+
+                    </td>
+                    <td class="" data-id={tableData.Id}>
+                        <div class="date_style"><div>{tableData.Date}&nbsp;</div><div><span class={tableData.timeColor}>{tableData.weekday}&nbsp;{tableData.StartTime}{tableData.dated}{tableData.EndTime}</span></div></div> 
+                    </td>
+                    <td>
+                        <div class="slds-truncate">{tableData.Name}</div>
+                    </td>
+                    <td>
+                        <div class="slds-truncate">{tableData.Mileage} mi</div>
+                    </td>
+                    <td>
+                        <div class="slds-truncate">{tableData.FromLocation}</div>
+                    </td>
+                    <td>
+                        <div class="slds-truncate">{tableData.ToLocation}</div>
+                    </td>
+                    <td>
+                        <div class="slds-truncate">{tableData.Tags}</div>
+                    </td>
+                    <td>
+                        <div class="slds-truncate">{tableData.Notes}</div>
+                    </td>
+                    <td>
+                        <div class="slds-truncate">{tableData.Activity}</div>
+                    </td>
+                </tr>
+            </template>
+    </table>
+</template>

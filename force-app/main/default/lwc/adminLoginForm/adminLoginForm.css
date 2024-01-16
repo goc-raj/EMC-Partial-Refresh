@@ -1,0 +1,142 @@
+.login-form-container {
+    height: 300px;
+    width: 450px;
+    display: flex;
+    flex-direction: column;
+    /* align-items: center; */
+}
+
+.headerText {
+    font-weight: bold;
+    font-size: 22px;
+    text-align: center;
+    padding-bottom: 20px;
+    font-family: 'Proxima Nova Semibold' !important;
+    color: #1D1D1D;
+}
+
+.errorText {
+    font-weight: 600;
+    text-align: left;
+    color: #FA7800;
+    font-family: 'Proxima Nova Bold' !important;
+    font-size: 15px;
+    margin-bottom: 15px;
+}
+
+.input-area-container {
+    gap: 20px;
+    padding: 10px 3px;
+    text-align: center;
+}
+
+.field-container1,
+.field-container2 {
+    display: flex;
+    border: 1px solid #E4E4E4;
+    width: 100%;
+    border-radius: 10px;
+    /* position: relative; */
+    padding: 3px;
+}
+
+.contBorder {
+    border: 1px solid #7ABB4A;
+}
+
+.field-input {
+    /* padding: 0 0 0 9px !important; */
+    color: #1D1D1D;
+    border: 0;
+    width: 100%;
+    border-radius: 10px;
+    font-family: 'Proxima Nova' !important;
+    font-size: 14px;
+}
+.field-input::placeholder {
+    color: #707070 !important;
+}
+.field-input:disabled {
+    background-color: white;
+}
+
+.slds-input:focus {
+    --slds-c-input-shadow: none !important;
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+.field-error {
+    border: 1px dashed #FA7800;
+}
+
+.input-button{
+    width: 50px;
+    height: 34px;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.submitButton {
+    width: 85px;
+    height: 40px;
+    font-weight: bold;
+    border: 1px solid #7ABB4A;
+    border-radius: 6px;
+    background-color: #7ABB4A;
+    color: white;
+    font-family: 'Proxima Nova Bold' !important;
+    margin-top: 10px;
+}
+
+.submitButtonDisabled {
+    background: none !important;
+    background-color: #FFFFFF;
+    opacity: 0.45;
+    color: #7ABB4A;
+}
+
+.passwdButton {
+    background: transparent;
+    border: 0;
+    color: #7ABB4A;
+    font-size: 15px;
+    font-family: 'Proxima Nova Bold' !important;
+    margin-top: 10px;
+}
+
+
+/* Responsive styles for different devices */
+
+/* Styles for tablet devices */
+@media only screen and (max-width: 768px) {
+    .login-form-container {
+        width: 80%;
+        margin: 0 auto;
+    }
+}
+
+/* Styles for mobile devices */
+@media only screen and (max-width: 425px) {
+    .login-form-container {
+        width: 95%;
+        height: 250px;
+    }
+    .headerText {
+        padding-bottom: 10px;
+    }
+    .errorText {
+        margin-bottom: 10px;
+    }
+    .input-area-container {
+        gap: 10px;
+    }
+    .submitButton {
+        margin-top: 8px;
+    }
+    .passwdButton {
+        margin-top: 8px;
+    }
+}
