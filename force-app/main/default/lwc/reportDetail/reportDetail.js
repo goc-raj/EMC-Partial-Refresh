@@ -193,9 +193,9 @@ export default class ReportDetail extends LightningElement {
     var report, reportname, apifieldstoheader = new Map(), numericheadertoapifields = new Map(), datetimefields = new Map(), booleanfields = new Map(), datefields = new Map(), datetotimefields = new Map(), twodecimalfields = new Map(), headerlist = [], headerfields = [], numericheaderarray = [], reportdatetimefields = [], reportdatefields = [], reportdatetimetotimefields = [], reportbooleanfields = [], reporttwodecimalfields = [];
     report = object
     if(report){
-      let sql = report.Report_Soql__c.split('from')
+      let sql = report.Report_Soql__c.split('from');
       if(sql){
-        let fields = sql[0].split('select')[1].trim().split(',')
+        let fields = sql[0].split('select')[1].trim().split(',');
         if(fields){
             if (report.Report_Header__c != undefined) {
                 if (report.Report_Header__c.includes(',')) {
@@ -271,6 +271,7 @@ export default class ReportDetail extends LightningElement {
                     apifieldstoheader.set(fields[j],headerlist[j]);
                 }
             }
+            console.log('API Fields : ' + [...apifieldstoheader]);
 
            // numericheadertoapifields = new Map();
             for (var j = 0; j < headerfields.length; j++) {
@@ -317,6 +318,7 @@ export default class ReportDetail extends LightningElement {
             // creation of array
             var map3 = new Map(), 
             valueofkey = [];
+            console.log("Data at commonFilter : " + JSON.stringify(data));
             for(var i = 0;i<data.length;i++)
             {
                 Object.keys(data[i]).forEach(function(key){
@@ -367,6 +369,7 @@ export default class ReportDetail extends LightningElement {
                 valueofkey = [];
             }
 
+            console.log('Data after mapping : ' + [...map3]);
             var finnalArr = [];
             map3.forEach(function(item, key) {
               let arrayvalues = map3.get(key);
@@ -378,7 +381,7 @@ export default class ReportDetail extends LightningElement {
                         if (keyData === 'Variable Reimbursement') {
                                 finnalData[keyData.replace(/\s/g, "")] = '$' + arrayvalues[index + 1]
                         }else{
-                          finnalData[keyData.replace(/\s/g, "")]=arrayvalues[index+1]
+                          finnalData[keyData.replace(/\s/g, "")] = arrayvalues[index+1]
                         }
                         for(i = 0 ; i < numericheaderarray.length; i++){
                             if(keyData != 'Variable Rate'){
@@ -1497,6 +1500,15 @@ export default class ReportDetail extends LightningElement {
           } else {
             this.dynamicBinding(this.finaldataSearch, this.headerdata)
             // this.finaldataSearch = this.finaldataSearch.sort((a, b) => b - a);
+            /* Fixed decimal issue in Fixed Amount field */
+            for (let record of this.finaldataSearch) {
+              for (let keyField of record.keyFields) {
+                if (keyField.key === "Fixed" && keyField.value !== null && keyField.value.endsWith(".")) {
+                  keyField.value = keyField.value.slice(0, -1);
+                }
+              }
+            }
+            /* Added by Raj */
             this.template.querySelector('c-user-preview-table').refreshTable(this.finaldataSearch);
             this.exceldata = this.finaldataSearch;
             this.loaddata = this.finaldataSearch;
@@ -1522,6 +1534,15 @@ export default class ReportDetail extends LightningElement {
             this.filterdatanew = this.searchdata;
           } else {
             this.dynamicBinding(this.finaldata, this.headerdata)
+            /* Fixed decimal issue in Fixed Amount field */
+            for (let record of this.finaldata) {
+              for (let keyField of record.keyFields) {
+                if (keyField.key === "Fixed" && keyField.value !== null && keyField.value.endsWith(".")) {
+                  keyField.value = keyField.value.slice(0, -1);
+                }
+              }
+            }
+            /* Added by Raj */
             this.template.querySelector('c-user-preview-table').refreshTable(this.finaldata);
             this.exceldata = this.finaldata;
             this.loaddata = this.finaldata;
@@ -1907,8 +1928,8 @@ export default class ReportDetail extends LightningElement {
                    console.log("Error formatting", e.message)
                  }
               }
-              for (var h = 0; h < objarray.length; h++) {
 
+              for (var h = 0; h < objarray.length; h++) {
                 let finalObj;
                 for (var n = 0; n < objarray[h].length; n++) {
                   finalObj = Object.assign({}, ...objarray[h]);
