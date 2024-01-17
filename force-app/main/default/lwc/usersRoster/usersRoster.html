@@ -32,7 +32,7 @@
     <template lwc:if={isListEmployeetab}>
         <template lwc:if={isFieldTypeLoaded}>
             <template lwc:if={isdataLoaded}>
-                <div class="employee-container">
+                <div class="employee-container animate__animated animate__slideInLeft animate__faster">
                     <c-user-preview-table view-name="User"  head-th="header-title--v1" sort-th="sort-container p-top-v1" main-class={classToTable} model-data={employeeList} 
                     columns={employeeColumn} options={empKeyFields} is-sortable={sortable} oneditmode={editMode} onupdate={handleUpdateList}
                     colname="name" coltype="String" onremovetag={handleRemoveTag} norecord-message={noMessage} inline-checkbox={isCheckbox} oniconclick={handleModal} 
@@ -148,8 +148,8 @@
                         </c-tag-state-list>
                     </template>
                     <template lwc:if={isDeactivateDateModal}>
-                        <div>
-                            <div class="slds-grid slds-wrap slds-p-top_large">
+                        <div style="width: 100%;">
+                            <div class="slds-grid slds-wrap slds-p-top_large slds-p-horizontal_xx-large">
                                 <div class="slds-col slds-size_2-of-4 slds-p-top_x-small modal-input">Deactivation Date:</div>
                                 <div class="slds-col slds-size_2-of-4 slds-m-bottom_medium">
                                     <c-date-picker date={deactivaedDate}  ondateselect={handledate}></c-date-picker>

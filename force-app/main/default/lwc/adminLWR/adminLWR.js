@@ -1,5 +1,6 @@
 import { LightningElement, track, api, wire } from 'lwc';
 import Profile from '@salesforce/schema/User.ProfileId';
+import videoLink from '@salesforce/apex/GetDriverData.getVideoLink';
 import { getRecord } from 'lightning/uiRecordApi';
 import USER_ID from '@salesforce/user/Id';
 
@@ -9,6 +10,7 @@ export default class AdminLWR extends LightningElement {
     isTeamShow;
     currentUserProfileId;
     Role;
+    customSetting;
     /*Get parameters from URL*/
     getUrlParamValue(url, key) {
         return new URL(url).searchParams.get(key);
@@ -41,6 +43,16 @@ export default class AdminLWR extends LightningElement {
         this._contactId = this.getUrlParamValue(location.href, "id");
         this._accountId = this.getUrlParamValue(location.href, "accid");;
         this.isTeamShow = this.getUrlParamValue(location.href, "showteam");
+        videoLink()
+        .then((result)=>{
+            if(result){
+                this.customSetting = JSON.parse(result)
+            }
+                console.log("video list",result)
+        }).catch((err)=>{
+                console.log("Error--", err.message)
+        })
+      
         console.log('Constructor:--', this.getUrlParamValue(location.href, "id"))
     }
 

@@ -40,6 +40,7 @@ export default class LoginRedirector extends NavigationMixin(LightningElement) {
       console.log("Page---", this.pageRef);
     }
 
+
     connectedCallback(){
         console.log('Login redirector')
         getParameters().
@@ -56,7 +57,7 @@ export default class LoginRedirector extends NavigationMixin(LightningElement) {
                     url.searchParams.append('accid', accountID);
                     url.searchParams.append('id', contactID);
                     window.history.replaceState({}, '', url);*/
-                    //location.assign(url);
+                    //location.assign(url);         
                     this[NavigationMixin.Navigate]({
                         type: 'comm__namedPage',
                         attributes: {
@@ -67,7 +68,9 @@ export default class LoginRedirector extends NavigationMixin(LightningElement) {
                             id: contactID,
                             showteam: showTeam
                         }
-                      });
+                    });
+
+                  
                  }
             } 
         }).catch(error =>{

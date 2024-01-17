@@ -812,7 +812,7 @@ export default class AdminProfileLWR extends LightningElement {
         console.log("inside popState", this.lastMonth, this.lastMonthSelected);
         const url = new URL(location);
         const state = window.performance.getEntriesByType("navigation")[0].type;
-        console.log("Main---->", url.hash, event);
+        console.log("Main---->", url.hash, event, state);
         let params = new URL(location).searchParams;
         let address = url.hash;
         let showteam = params.get("showteam");
@@ -1089,6 +1089,7 @@ export default class AdminProfileLWR extends LightningElement {
             this.template.querySelector('c-navigation-menu').toggleStyle('Reports');
         } else if (address === '#Report-Detail') {
             if (state === 'reload') {
+                console.log("inside report--", state, window.history.length)
                 window.history.go(window.history.length - window.history.length - 1);
             } else {
                 document.title = "Reports";
@@ -1651,7 +1652,7 @@ export default class AdminProfileLWR extends LightningElement {
             location.origin +
             location.pathname +
             location.search +
-            "#Report-Detail";
+            '#Report-Detail';
         this.template
             .querySelector("c-navigation-menu")
             .toggleStyle("Reports");
@@ -2678,6 +2679,8 @@ export default class AdminProfileLWR extends LightningElement {
             setTimeout(() => {
                 this.popStateMessage();
             }, 10);
+        }else{
+            location.hash = 'Dashboard';
         }
 
         this.getContactNotification();

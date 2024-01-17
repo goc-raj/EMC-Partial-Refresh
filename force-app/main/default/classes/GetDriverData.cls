@@ -25,6 +25,12 @@ public with sharing class GetDriverData {
         }        
     }
     
+    @AuraEnabled
+    public static String getVideoLink(){
+         NewDashboardVideoLink__c videoCustomSetting = NewDashboardVideoLink__c.getOrgDefaults();
+         return json.serialize(videoCustomSetting );
+    }
+    
     public static String getContactid() {
         if(ApexPages.currentPage().getParameters().containsKey('id') && String.isNotBlank(ApexPages.currentPage().getParameters().get('id'))) {
            return ApexPages.currentPage().getParameters().get('id');
@@ -160,7 +166,7 @@ public with sharing class GetDriverData {
                         TimeZone__c,EmployeeReimbursement__r.Month__c,Drive_Stay_Time__c,
                         StartTime__c, EndTime__c,EMP_Mileage__c,Trip_Destination_State__c 
                     FROM Employee_Mileage__c
-                    WHERE EmployeeReimbursement__r.Contact_Id__r.AccountId = '0013r00002EkwWMAAZ' 
+                    //WHERE EmployeeReimbursement__r.Contact_Id__r.AccountId = '0013r00002EkwWMAAZ' 
                    // AND EmployeeReimbursement__r.Month__c =: lastMonth
                    // AND EmployeeReimbursement__r.Contact_Id__r.Deactivated_Date__c = null
                     order by ConvertedStartTime__c asc 
@@ -182,7 +188,7 @@ public with sharing class GetDriverData {
                         TimeZone__c,EmployeeReimbursement__r.Month__c,Drive_Stay_Time__c,
                         StartTime__c, EndTime__c,EMP_Mileage__c,Trip_Destination_State__c 
                     FROM Employee_Mileage__c
-                    WHERE EmployeeReimbursement__r.Contact_Id__r.AccountId = '0013r00002EkwWMAAZ' 
+                    //WHERE EmployeeReimbursement__r.Contact_Id__r.AccountId = '0013r00002EkwWMAAZ' 
                       //  AND EmployeeReimbursement__r.Month__c =: lastMonth
                       //  AND ((EmployeeReimbursement__r.Contact_Id__r.Manager__c =: AdminId) 
                      //   OR (EmployeeReimbursement__r.Contact_Id__r.Manager__r.Manager__c =: AdminId) 
@@ -231,10 +237,10 @@ public with sharing class GetDriverData {
                         TimeZone__c,EmployeeReimbursement__r.Month__c,Drive_Stay_Time__c,EmployeeReimbursement__r.Mileage_Lock_Date__c,
                         StartTime__c, EndTime__c,EMP_Mileage__c,Original_Origin_Name__c,Original_Destination_Name__c,Trip_Destination_State__c 
                     FROM Employee_Mileage__c
-                    WHERE EmployeeReimbursement__r.Contact_Id__r.AccountId =: accID 
-                      AND EmployeeReimbursement__r.Month__c =: lastMonth 
-                      AND   EmployeeReimbursement__r.Contact_Id__r.Deactivated_Date__c = null
-                         order by ConvertedStartTime__c desc
+                   // WHERE EmployeeReimbursement__r.Contact_Id__r.AccountId =: accID 
+                    //  AND EmployeeReimbursement__r.Month__c =: lastMonth 
+                    //  AND   EmployeeReimbursement__r.Contact_Id__r.Deactivated_Date__c = null
+                    //     order by ConvertedStartTime__c desc
                     LIMIT :limitSize
                      OFFSET :offset];
                        
@@ -255,15 +261,15 @@ public with sharing class GetDriverData {
                         StartTime__c,EndTime__c,EMP_Mileage__c,Original_Origin_Name__c,Original_Destination_Name__c,Trip_Destination_State__c  
                     FROM Employee_Mileage__c
                     
-                    WHERE EmployeeReimbursement__r.Contact_Id__r.AccountId =: accID 
-                         AND EmployeeReimbursement__r.Month__c =: lastMonth
-                         AND ((EmployeeReimbursement__r.Contact_Id__r.Manager__c =: AdminId) 
-                        OR (EmployeeReimbursement__r.Contact_Id__r.Manager__r.Manager__c =: AdminId) 
-                         OR (EmployeeReimbursement__r.Contact_Id__r.Manager__r.Manager__r.Manager__c =: AdminId) 
-                         OR (EmployeeReimbursement__r.Contact_Id__r.Manager__r.Manager__r.Manager__r.Manager__c =: AdminId) 
-                         ) AND 
-                         EmployeeReimbursement__r.Contact_Id__r.Deactivated_Date__c = null
-                         order by ConvertedStartTime__c desc
+                   // WHERE EmployeeReimbursement__r.Contact_Id__r.AccountId =: accID 
+                       //  AND EmployeeReimbursement__r.Month__c =: lastMonth
+                      //   AND ((EmployeeReimbursement__r.Contact_Id__r.Manager__c =: AdminId) 
+                      //  OR (EmployeeReimbursement__r.Contact_Id__r.Manager__r.Manager__c =: AdminId) 
+                       //  OR (EmployeeReimbursement__r.Contact_Id__r.Manager__r.Manager__r.Manager__c =: AdminId) 
+                       //  OR (EmployeeReimbursement__r.Contact_Id__r.Manager__r.Manager__r.Manager__r.Manager__c =: AdminId) 
+                        // ) AND 
+                       //  EmployeeReimbursement__r.Contact_Id__r.Deactivated_Date__c = null
+                       order by ConvertedStartTime__c desc
                         LIMIT : limitSize
                          OFFSET :offset];
                        
@@ -293,7 +299,7 @@ public with sharing class GetDriverData {
                        TimeZone__c,EmployeeReimbursement__r.Month__c,Drive_Stay_Time__c,EmployeeReimbursement__r.Mileage_Lock_Date__c,
                        StartTime__c, EndTime__c,EMP_Mileage__c,Original_Origin_Name__c,Original_Destination_Name__c 
                    FROM Employee_Mileage__c
-                   WHERE EmployeeReimbursement__r.Contact_Id__r.AccountId = '0013r00002EkwWMAAZ' 
+                  // WHERE EmployeeReimbursement__r.Contact_Id__r.AccountId = '0013r00002EkwWMAAZ' 
                        //AND EmployeeReimbursement__r.Month__c =: lastMonth 
                        //AND EmployeeReimbursement__r.Contact_Id__r.Deactivated_Date__c = null
                        order by ConvertedStartTime__c desc
@@ -318,7 +324,7 @@ public with sharing class GetDriverData {
                        StartTime__c,EndTime__c,EMP_Mileage__c,Original_Origin_Name__c,Original_Destination_Name__c  
                    FROM Employee_Mileage__c
                    
-                   WHERE EmployeeReimbursement__r.Contact_Id__r.AccountId = '0013r00002EkwWMAAZ' 
+                  // WHERE EmployeeReimbursement__r.Contact_Id__r.AccountId = '0013r00002EkwWMAAZ' 
                        /* AND EmployeeReimbursement__r.Month__c =: lastMonth
                         AND ((EmployeeReimbursement__r.Contact_Id__r.Manager__c =: AdminId) 
                         OR (EmployeeReimbursement__r.Contact_Id__r.Manager__r.Manager__c =: AdminId) 

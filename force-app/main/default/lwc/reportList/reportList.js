@@ -123,7 +123,6 @@ export default class ReportList extends NavigationMixin(LightningElement) {
       }
   
     connectedCallback(){
-       
         this._accid  = this.getUrlParamValue(location.href, 'accid')
         this._adminid  = this.getUrlParamValue(location.href, 'id')
         this.getYear();
@@ -141,15 +140,16 @@ export default class ReportList extends NavigationMixin(LightningElement) {
                 })
             });
                 this.ERMI_ACCOUNT.forEach(eermiacct => {
-                    if(eermiacct == this._adminid){
-                        this.reportdetailname.push({name:"Reimbursement Reports" , reportname : "Time and Attendance Detail Report" })
-                        this.reportdetailname.push({name:"Reimbursement Reports" , reportname : "Time, Attendance and Mileage Summary Report" })
-                        this.reportdetailname.push({name:"Reimbursement Reports" , reportname : "Monthly Tax Report" })
-                        this.reportdetailname.push({name:"NetChex Payable Reports" , reportname : "Bi-weekly Time and Attendance Payment" })
-                        this.reportdetailname.push({name:"NetChex Payable Reports" , reportname : "Bi-weekly Salary and Full Time Fixed Payment" })
-                        this.reportdetailname.push({name:"NetChex Payable Reports" , reportname : "Monthly NetChex Variable Payment" })
-                        this.reportdetailname.push({name:"NetChex Payable Reports" , reportname : "Monthly Part Time Fixed Amount Payment" })
-                        this.reportdetailname.push({name:"NetChex Payable Reports" , reportname : "Delete NetChex Report" })
+                    if(eermiacct === this._adminid){
+                        this.reportdetailname.push(
+                            {name:"Reimbursement Reports" , reportname : "Time and Attendance Detail Report" },
+                            {name:"Reimbursement Reports" , reportname : "Time, Attendance and Mileage Summary Report" },
+                            {name:"Reimbursement Reports" , reportname : "Monthly Tax Report" },
+                            {name:"NetChex Payable Reports" , reportname : "Bi-weekly Time and Attendance Payment" },
+                            {name:"NetChex Payable Reports" , reportname : "Bi-weekly Salary and Full Time Fixed Payment" },
+                            {name:"NetChex Payable Reports" , reportname : "Monthly NetChex Variable Payment" },
+                            {name:"NetChex Payable Reports" , reportname : "Monthly Part Time Fixed Amount Payment" },
+                            {name:"NetChex Payable Reports" , reportname : "Delete NetChex Report" })
                     }
                 })
                
@@ -161,8 +161,8 @@ export default class ReportList extends NavigationMixin(LightningElement) {
                 // this.reportdetailname.push({name:"Reimbursement Reports" , reportname : "Biweekly Mileage Reimbursement Report" })
                 
 
-                this.reportdetailname.push({name:"Tax Liability Reports" , reportname : "Annual Tax Liability Report" })
-                this.reportdetailname.push({name:"Tax Liability Reports" , reportname : "Tax Liability" })
+                this.reportdetailname.push({name:"Tax Liability Reports" , reportname : "Annual Tax Liability Report" },
+                {name:"Tax Liability Reports" , reportname : "Tax Liability" })
                 // this.reportdetailname.push({name:"Reimbursement Reports" , reportname : "Variable Reimbursement Report" })
                
                 if(FramptonConstruction == this._accid){

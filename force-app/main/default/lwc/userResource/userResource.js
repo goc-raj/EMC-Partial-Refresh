@@ -719,7 +719,7 @@ export default class UserResource extends LightningElement {
 
        
        
-        console.log("id of resource###", idOfResource)
+        console.log("id of resource###", idOfResource, this.settings.mLog_FAQ_s__c, this.settings.Compliance__c)
     }
 
     mLogResource(event) {

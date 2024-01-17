@@ -1778,10 +1778,8 @@ export default class ReportDetail extends LightningElement {
 
         getDriverManagerDropdownList({ accountId: this._accid, contactId: this._adminid, reportId: this.reportId, checkLimit: this.limitOfrecord })
           .then(result => {
-            console.log("data", result)
-
-            let data = JSON.parse(result)
-            console.log("data", data)
+            let data = JSON.parse(result);
+            console.log("result : " + JSON.parse(data[1]));
             if (this.DriverManager == 'Manager') {
               this.detaildata = JSON.parse(JSON.parse(data[1]));
               this.originalData = JSON.parse(JSON.parse(data[1]));
@@ -1952,8 +1950,6 @@ export default class ReportDetail extends LightningElement {
         console.log("error for report list", JSON.parse(JSON.stringify(error)))
 
       })
-
-     
   }
   formatNumberWithCommas(number) {
     //return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
