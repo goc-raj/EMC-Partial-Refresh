@@ -1,0 +1,15 @@
+<template>
+    <div lwc:if={loadSpinner}>
+        <div class="spinner-background"></div>
+            <div class="loader">
+                <span class="text-loading" id="welcome-text"></span>
+                <div class="loading-text-sub" id="subtext-welcome"></div>
+                <div class="mbloader-text">Please wait while we load your profile</div>
+                <div class="svg-container">
+                    <div style="position:relative">
+                       <img style="width: 72px;" src={loader} />
+                    </div>
+                </div>
+            </div>
+    </div>
+</template>

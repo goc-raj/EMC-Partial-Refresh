@@ -1,6 +1,5 @@
 <template>
     <c-toast-l-w-r lwc:ref="toast"></c-toast-l-w-r>
-    <!--<template lwc:if={profile}>-->
         <c-navigation-menu driver-menu-item={adminProfileMenu} onsidebar={handleSidebarToggle} record-id={contactId} driver-name={userName} driver-email={userEmail} profile-id={profile} onlogout={handleLogout}></c-navigation-menu>
         <c-dashboard-profile-header user-name={firstName} full-name={contactTitle} unread={unreadCount} page-source={isHomePage} onnotify={viewAllNotification} onlogout={handleLogout} driver-menu={menu} is-navigate="true">
             <!--<template lwc:if={isProfile}>
@@ -174,5 +173,4 @@
                 </div>
             </template>
         </section>
-    <!--</template>-->
 </template>

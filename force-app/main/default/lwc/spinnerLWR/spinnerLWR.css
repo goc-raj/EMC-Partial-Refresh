@@ -1,0 +1,55 @@
+.spinner-background{
+    width: 100%;
+    height: 100%;
+    background: #FFF;
+    opacity: 1;
+    top: 0px;
+    left: 0px;
+    position: fixed;
+    z-index: 1000000;
+}
+
+.loader{
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000000;
+}
+
+.text-loading{
+    font-family: 'Proxima Nova Bold' !important;
+    font-size: 35px;
+    line-height: 39px;
+    display: flex;
+    align-items: center;
+    text-align: center;
+    justify-content: center;
+    color: #78BC42;
+}
+
+.loading-text-sub{
+    font-family: 'Proxima Nova Bold' !important;
+    font-size: 32px;
+    line-height: 39px;
+    padding-top: 12px;
+    display: flex;
+    align-items: center;
+    text-align: center;
+    justify-content: center;
+    color: #404b5a;
+}
+
+.mloader-text{
+    font-weight: 400;
+    font-size: 22px;
+    line-height: 19px;
+    font-family: 'Proxima Nova Bold' !important;
+    padding-top: 20px;
+    color: #1D1D1D;
+}

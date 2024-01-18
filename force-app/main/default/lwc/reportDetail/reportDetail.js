@@ -196,6 +196,7 @@ export default class ReportDetail extends LightningElement {
       let sql = report.Report_Soql__c.split('from');
       if(sql){
         let fields = sql[0].split('select')[1].trim().split(',');
+        console.log('Fields in commonFilter : ' + fields);
         if(fields){
             if (report.Report_Header__c != undefined) {
                 if (report.Report_Header__c.includes(',')) {
@@ -205,6 +206,7 @@ export default class ReportDetail extends LightningElement {
                     headerlist.push(report.Report_Header__c);
                 }
             }
+            console.log('Headerlist in commonFilter : ' + headerlist);
             if (report.Boolean_Field__c != undefined) {
               if (report.Boolean_Field__c.includes(',')) {
                   reportbooleanfields = report.Boolean_Field__c.split(',');
@@ -259,7 +261,18 @@ export default class ReportDetail extends LightningElement {
               }
             }
 
-          
+            // Set this.header variable
+            for(let i = 0; i < headerlist.length; i++) {
+              let colType = 'String';
+              if(headerfields.includes(fields[i])) {
+                colType = 'Integer';
+              } else if (reportdatefields.includes(fields[i])) {
+                colType = 'Date';
+              }
+              console.log('Column Type in CF : ' + colType);
+            }
+            // Added by Raj
+
             for(var j = 0;j<fields.length;j++)
             {
                 if(fields[j].includes('.'))
@@ -328,6 +341,11 @@ export default class ReportDetail extends LightningElement {
                         {
                             _self.consolidatejson(data[i][key],i, apifieldstoheader, datefields, datetimefields, datetotimefields, valueofkey, _self);
                         }
+                        // Set fields Id
+                        else if(key == 'Id') {
+                          valueofkey.push('Id',data[i][key]);
+                        }
+                        // Added by Raj
                         else
                         {
                             if(apifieldstoheader.has(key))
@@ -379,16 +397,19 @@ export default class ReportDetail extends LightningElement {
                     if(index>ind){
                         let keyData=item[index];
                         if (keyData === 'Variable Reimbursement') {
-                                finnalData[keyData.replace(/\s/g, "")] = '$' + arrayvalues[index + 1]
+                                // finnalData[keyData.replace(/\s/g, "")] = '$' + arrayvalues[index + 1]
+                                finnalData[keyData] = '$' + arrayvalues[index + 1]
                         }else{
-                          finnalData[keyData.replace(/\s/g, "")] = arrayvalues[index+1]
+                          // finnalData[keyData.replace(/\s/g, "")] = arrayvalues[index+1]
+                          finnalData[keyData] = arrayvalues[index+1]
                         }
                         for(i = 0 ; i < numericheaderarray.length; i++){
                             if(keyData != 'Variable Rate'){
-                                finnalData[keyData.replace(/\s/g, "")]=(arrayvalues[index+1]).toLocaleString();
+                                // finnalData[keyData.replace(/\s/g, "")]=(arrayvalues[index+1]).toLocaleString();
+                                finnalData[keyData]=(arrayvalues[index+1]).toLocaleString();
                           }
                         }
-                      
+
                         ind = index+1;
                         }
                     });
@@ -486,6 +507,11 @@ export default class ReportDetail extends LightningElement {
         if (typeof getdata[key] == "object") {
           _self.consolidatejson(getdata[key], i);
         }
+        // Set field Id
+        else if(key == 'Id') {
+          valueofkey.push('Id',getdata[key]);
+        }
+        // Added by Raj
         else {
           if (apifieldstoheader.has(key)) {
             if (datetotimefields.has(key)) {
@@ -1659,18 +1685,9 @@ export default class ReportDetail extends LightningElement {
 
           } else if (showfilter == 'Dates') {
             var currentDate = new Date();
-            var getmonth = currentDate.getMonth();
             let startDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
-            console.log('startDate : ' + startDate);
             let enddate = new Date(currentDate.getFullYear(), currentDate.getMonth(), 0);
-            console.log('endDate : ' + enddate);
-            let convertdate;
-            let convertmonth;
-            let convertYear;
-            console.log('startDateMonth : '+ startDate.getMonth());
-            console.log('startDateDate : '+ startDate.getDate());
-            console.log('endDateMonth : '+ enddate.getMonth());
-            console.log('endDateDate : '+ enddate.getDate());
+            let convertdate, convertmonth, convertYear, getyear, endconvertdate, endconvertmonth;
             if(startDate.getMonth() === 0) {
               convertmonth = '12';
             }
@@ -1679,25 +1696,18 @@ export default class ReportDetail extends LightningElement {
             } else {
               convertmonth = startDate.getMonth();
             }
-            console.log('ConvMonth : ' + convertmonth);
             if (startDate.getDate() < 9) {
               convertdate = '0' + startDate.getDate();
             } else {
               convertdate = startDate.getDate();
             }
-            console.log('ConvDate : ' + convertdate);
-            let getyear = startDate.getYear();
-            getyear = getyear.toString();
-            console.log('Year : ' + getyear.substring(1));
+            getyear = startDate.getYear().toString();
             if(startDate.getMonth() === 0) {
               convertYear = getyear.substring(1) - 1;
             } else {
               convertYear = getyear.substring(1);
             }
             this.from_Date = convertmonth + '/' + convertdate + '/' + convertYear;
-            console.log('Start Date : ' + this.from_Date);
-            let endconvertdate;
-            let endconvertmonth;
             if (enddate.getMonth() < 9) {
               endconvertmonth = '0' + (enddate.getMonth() + 1);
             } else {
@@ -1709,7 +1719,6 @@ export default class ReportDetail extends LightningElement {
               endconvertdate = enddate.getDate();
             }
             this.to_Date = endconvertmonth + '/' + endconvertdate + '/' + convertYear;
-            console.log('End Date : ' + this.to_Date);
             this.dateRange = true;
             this.monthlyDropdown = false;
             this.weeklyDropdown = false;
@@ -1751,8 +1760,10 @@ export default class ReportDetail extends LightningElement {
         var detailarraynew = new Array();
         detailarraynew = detaildata.split(",");
         this.detail = detailarraynew;
+        console.log('this.detail : ' + this.detail);
         let detaildatanew = JSON.parse(JSON.stringify(detailarraynew))
         this.detailsoql = JSON.parse(JSON.stringify(detailarraynew));
+        console.log('this.detailsoql : ' + this.detailsoql);
 
         var imageList = [];
         let coltype;
@@ -1795,7 +1806,9 @@ export default class ReportDetail extends LightningElement {
           }
         }
         this.header = JSON.parse(JSON.stringify(imageList));
-        console.log("this.header", this.header)
+        console.log("this.header", JSON.stringify(this.header));
+        console.log('column Name : ' + this.columnName);
+        console.log('column Type : ' + this.columnType);
 
         getDriverManagerDropdownList({ accountId: this._accid, contactId: this._adminid, reportId: this.reportId, checkLimit: this.limitOfrecord })
           .then(result => {
@@ -1808,6 +1821,7 @@ export default class ReportDetail extends LightningElement {
               this.detaildata = JSON.parse(JSON.parse(data[0]));
               this.originalData = JSON.parse(JSON.parse(data[0]));
             }
+            console.log('detailData : ' + JSON.stringify(this.detaildata));
             if (this.detaildata.length > 0) {
               this.showbuttons = true;
               if (this.reportId == TripDetailReportSightScience) {
@@ -1879,6 +1893,7 @@ export default class ReportDetail extends LightningElement {
               this.headerfields.set('Id', 'Id');
               // this.headerfields.set(Id,Id);
               console.log("this.headerfields", this.headerfields)
+
               for (var i = 0; i < this.detaildata.length; i++) {
                 Object.keys(this.detaildata[i]).forEach((key) => {
                   if (key != "attributes") {

@@ -1,5 +1,5 @@
 import { LightningElement, wire } from 'lwc';
-import { CurrentPageReference, NavigationMixin } from 'lightning/navigation';
+import { NavigationMixin } from 'lightning/navigation';
 import getParameters from '@salesforce/apex/LoginRedirectionCommunity.getParameters';
 export default class LoginRedirector extends NavigationMixin(LightningElement) {
     // @wire(redirectOnPage)
@@ -32,17 +32,18 @@ export default class LoginRedirector extends NavigationMixin(LightningElement) {
         }
     }*/
 
-    myValue;
+   /* myValue;
     pageRef;
     @wire(CurrentPageReference) handleStateChange(pageReference) {
       this.myValue = pageReference.state.c__myValue;
       this.pageRef = pageReference;
       console.log("Page---", this.pageRef);
-    }
+    }*/
 
 
     connectedCallback(){
         console.log('Login redirector')
+        location.hash = 'Dashboard'
         getParameters().
         then((data) => {
             if(data){
@@ -57,7 +58,7 @@ export default class LoginRedirector extends NavigationMixin(LightningElement) {
                     url.searchParams.append('accid', accountID);
                     url.searchParams.append('id', contactID);
                     window.history.replaceState({}, '', url);*/
-                    //location.assign(url);         
+                    //location.assign(url);        
                     this[NavigationMixin.Navigate]({
                         type: 'comm__namedPage',
                         attributes: {
@@ -70,7 +71,7 @@ export default class LoginRedirector extends NavigationMixin(LightningElement) {
                         }
                     });
 
-                  
+                   
                  }
             } 
         }).catch(error =>{

@@ -2679,8 +2679,6 @@ export default class AdminProfileLWR extends LightningElement {
             setTimeout(() => {
                 this.popStateMessage();
             }, 10);
-        }else{
-            location.hash = 'Dashboard';
         }
 
         this.getContactNotification();
