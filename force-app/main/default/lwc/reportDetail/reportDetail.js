@@ -181,16 +181,18 @@ export default class ReportDetail extends LightningElement {
   }
 
   dateConversionToTime(obj){
-      let date = new Date(obj)
+      console.log('Date Obj : ' + obj);
+      let date = new Date(obj);
+      console.log('New Date : ' + date);
       return date.toLocaleTimeString("en-US", {
-          timeZone: "America/Panama",
+          // timeZone: "America/Panama",
           hour: "2-digit",
           minute: "2-digit",
         });
   }
 
   commonFilter(data, object, _self){
-    var report, reportname, apifieldstoheader = new Map(), numericheadertoapifields = new Map(), datetimefields = new Map(), booleanfields = new Map(), datefields = new Map(), datetotimefields = new Map(), twodecimalfields = new Map(), headerlist = [], headerfields = [], numericheaderarray = [], reportdatetimefields = [], reportdatefields = [], reportdatetimetotimefields = [], reportbooleanfields = [], reporttwodecimalfields = [];
+    var report, reportname, numericheadertoapifields = new Map(), apifieldstoheader = new Map(), datetimefields = new Map(), booleanfields = new Map(), datefields = new Map(), datetotimefields = new Map(), twodecimalfields = new Map(), headerlist = [], headerfields = [], numericheaderarray = [], reportdatetimefields = [], reportdatefields = [], reportdatetimetotimefields = [], reportbooleanfields = [], reporttwodecimalfields = [];
     report = object
     if(report){
       let sql = report.Report_Soql__c.split('from');
@@ -262,6 +264,7 @@ export default class ReportDetail extends LightningElement {
             }
 
             // Set this.header variable
+            let headingData = [];
             for(let i = 0; i < headerlist.length; i++) {
               let colType = 'String';
               if(headerfields.includes(fields[i])) {
@@ -270,7 +273,13 @@ export default class ReportDetail extends LightningElement {
                 colType = 'Date';
               }
               console.log('Column Type in CF : ' + colType);
+              if(i == 0) {
+                headingData.push({ id: i, name: headerlist[i], colName: headerlist[i], colType: colType, arrUp: true, arrDown: false });
+              } else {
+                headingData.push({ id: i, name: headerlist[i], colName: headerlist[i], colType: colType, arrUp: false, arrDown: false });
+              }
             }
+            console.log('headingData : ' + JSON.stringify(headingData));
             // Added by Raj
 
             for(var j = 0;j<fields.length;j++)
@@ -284,7 +293,10 @@ export default class ReportDetail extends LightningElement {
                     apifieldstoheader.set(fields[j],headerlist[j]);
                 }
             }
-            console.log('API Fields : ' + [...apifieldstoheader]);
+            // Set Id field
+            apifieldstoheader.set('Id', 'Id');
+            // Added by Raj
+            console.log('API fields : ' + [...apifieldstoheader]);
 
            // numericheadertoapifields = new Map();
             for (var j = 0; j < headerfields.length; j++) {
@@ -341,11 +353,6 @@ export default class ReportDetail extends LightningElement {
                         {
                             _self.consolidatejson(data[i][key],i, apifieldstoheader, datefields, datetimefields, datetotimefields, valueofkey, _self);
                         }
-                        // Set fields Id
-                        else if(key == 'Id') {
-                          valueofkey.push('Id',data[i][key]);
-                        }
-                        // Added by Raj
                         else
                         {
                             if(apifieldstoheader.has(key))
@@ -505,13 +512,8 @@ export default class ReportDetail extends LightningElement {
     Object.keys(getdata).forEach(function (key) {
       if (key != "attributes") {
         if (typeof getdata[key] == "object") {
-          _self.consolidatejson(getdata[key], i);
+          _self.consolidatejson(getdata[key], i, apifieldstoheader, datefields, datetimefields, datetotimefields, valueofkey, _self);
         }
-        // Set field Id
-        else if(key == 'Id') {
-          valueofkey.push('Id',getdata[key]);
-        }
-        // Added by Raj
         else {
           if (apifieldstoheader.has(key)) {
             if (datetotimefields.has(key)) {
@@ -1869,7 +1871,9 @@ export default class ReportDetail extends LightningElement {
                   if (element.ConvertedStartTime__c != undefined) {
                     var starttime = element.ConvertedStartTime__c;
                     var time = new Date(starttime);
+                    console.log('Time : ' + time);
                     var ampm = time.toLocaleString('en-US', { hour: 'numeric', hour12: true })
+                    console.log('AMPM : ' + ampm);
                     element.ConvertedStartTime__c = (starttime.split('T')[1]).slice(0, 5) + ' ' + ampm.split(' ')[1];
                   }
                   if (element.ConvertedEndTime__c != undefined) {
@@ -1892,7 +1896,7 @@ export default class ReportDetail extends LightningElement {
               }
               this.headerfields.set('Id', 'Id');
               // this.headerfields.set(Id,Id);
-              console.log("this.headerfields", this.headerfields)
+              console.log("this.headerfields", this.headerfields);
 
               for (var i = 0; i < this.detaildata.length; i++) {
                 Object.keys(this.detaildata[i]).forEach((key) => {

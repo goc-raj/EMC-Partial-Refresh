@@ -43,16 +43,16 @@ export default class LoginRedirector extends NavigationMixin(LightningElement) {
 
     connectedCallback(){
         console.log('Login redirector')
-        location.hash = 'Dashboard'
         getParameters().
         then((data) => {
             if(data){
-                var accountID, contactID, showTeam, url
+                var accountID, contactID, showTeam, profile
                 if(location.search === ''){
                     console.log('user---', data, data.Contact, data.Contact?.AccountId)
                     accountID = data.Contact?.AccountId; // Replace with your Account ID
                     contactID = data.Contact?.Id; // Replace with your Contact ID
                     showTeam = data.Contact?.showTeamRecord__c;
+                    profile = ( data.ProfileId === '00e31000001FRDWAA4' || data.ProfileId === '00e31000001FRDXAA4') ? 'Manager' : ( data.ProfileId === '00e31000001FRDZAA4' ||  data.ProfileId === '00e31000001FRDYAA4' ||  data.ProfileId === '00eE1000000ZnAjIAK') ? 'Admin' : 'Driver';
                     document.title = (data.Profile?.Name === 'Community Portal User') ? 'Driver Dashboard' : (data.Profile?.Name === 'Community Portal User - Super Manager') ? 'Admin Dashboard' : 'Dashboard';
                     /*url = (data.Profile?.Name === 'Community Portal User') ? new URL(`${location.pathname}dashboard`, location.href) : (data.Profile?.Name === 'Community Portal User - Super Manager') ?  url = new URL(`${location.pathname}dashboard`, location.href) : location.href;
                     url.searchParams.append('accid', accountID);
@@ -67,12 +67,13 @@ export default class LoginRedirector extends NavigationMixin(LightningElement) {
                         state:{
                             accid: accountID,
                             id: contactID,
-                            showteam: showTeam
+                            showteam: showTeam,
+                            profile: profile
                         }
                     });
 
                    
-                 }
+                }
             } 
         }).catch(error =>{
                 console.log("Error--", JSON.parse(JSON.stringify(error)))

@@ -7,8 +7,8 @@
     <template lwc:if={complianceList}>
         <c-chart-lwr chartdata={complianceList} view-name="Compliance"></c-chart-lwr>
     </template>-->
-        <template lwc:if={currentUserProfileId}> 
-             <c-admin-profile-l-w-r contact-id={_contactId} account-id={_accountId} show-team={isTeamShow} profile={currentUserProfileId} user-role={Role} custom-setting={customSetting}></c-admin-profile-l-w-r>
+        <template lwc:if={role}>
+             <c-admin-profile-l-w-r contact-id={contactId} account-id={accountId} show-team={isTeamShow} profile={currentUserProfileId} user-role={role} custom-setting={customSetting}></c-admin-profile-l-w-r>
         </template>
         <!--<template lwc:else>
             <h1>Welcome To Communities</h1>
