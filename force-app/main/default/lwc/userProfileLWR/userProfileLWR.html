@@ -407,11 +407,10 @@
                 <template lwc:if={locationList}>
                     <div class="slds-col slds-size_1-of-1 slds-medium-size_12-of-12 slds-large-size_12-of-12 slds-align_absolute-center slds-p-top_medium"
                         style="--aspect-ratio: 16/9;"> <!--type={typeMap}-->
-                        <!--<c-point-chloropleth type={typeMap} background="#FFFFFF" locate={locationList}
+                        <c-map-chart-l-w-r type={typeMap} background="#FFFFFF" locate={locationList}
                             map-navigation={navigation} margin={margin} v-h={vhHeight} spacing-top={top}
-                            spacing-bottom={bottom} border-color="#FFFFFF" width="260"
-                            frame-class="vf-iframe slds-col slds-size_1-of-1 slds-medium-size_12-of-12 slds-large-size_12-of-12"
-                            height="200"></c-point-chloropleth>-->
+                            spacing-bottom={bottom} border-color="#FFFFFF" width="300"
+                            height="200"></c-map-chart-l-w-r>
                     </div>
                 </template>
                 <template lwc:else>
@@ -593,8 +592,8 @@
     </div>
     <template lwc:if={paginatedModal}> 
                 <div class="parent overlay-slide-down"><!--type={typeMap}-->
-                   <c-point-chloropleth title="My Team's Locations" type={typeMap} background="#FFFFFF" margin={margin}  spacing-top={top} spacing-bottom={bottom} v-h={vhHeight} map-navigation={navigation} frame-class="vf-iframe frame-full" locate={locationList} border-color="#FFFFFF" width="260"
-                    ></c-point-chloropleth>
+                   <c-map-chart-l-w-r title="My Team's Locations" type={typeMap} background="#FFFFFF" margin={margin}  spacing-top={top} spacing-bottom={bottom} v-h={vhHeight} map-navigation={navigation} locate={locationList} border-color="#FFFFFF" width="300"
+                    ></c-map-chart-l-w-r>
                 </div>
                 <button type="button" class="close popup-close-btn" onclick={exitFullscreen}><span aria-hidden="true" title="Exit fullscreen">×</span></button>
      </template>

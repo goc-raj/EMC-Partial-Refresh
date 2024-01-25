@@ -4,7 +4,6 @@ import bgImageSpring from "@salesforce/resourceUrl/LoginPageBGSpring";
 import bgImageSummer from "@salesforce/resourceUrl/LoginPageBGSummer";
 import bgImageWinter from "@salesforce/resourceUrl/LoginPageBGWinter";
 import SVG_LOGO from '@salesforce/resourceUrl/eExplorerLogo';
-
 import globalStyles from '@salesforce/resourceUrl/LoginFormStyle';
 import { loadStyle } from 'lightning/platformResourceLoader';
 
@@ -17,7 +16,6 @@ export default class AdminCommunityLogin extends LightningElement {
 
     renderedCallback() {
         this.mainElement = this.template.querySelector('.main-container');
-        console.log(this.mainElement);
         const currentDate = new Date();
         const currentMonth = currentDate.getMonth();
         if (currentMonth >= 2 && currentMonth <= 4) {
@@ -37,7 +35,6 @@ export default class AdminCommunityLogin extends LightningElement {
 
     showForgotPasswd(event) {
         this.email = event.detail.enteredEmail;
-        console.log(this.email);
         this.isSignIn = !this.isSignIn;
         let subDivElement = this.template.querySelector('.sub-container');
         subDivElement.style.height = 'auto';

@@ -393,7 +393,7 @@ export default class ChartLwr extends LightningElement {
         }
     }
 
-    renderedCallback() {
+    connectedCallback() {
 
         loadScript(this, highchartsResource + "/highcharts.js")
 

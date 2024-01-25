@@ -12,6 +12,7 @@ public with sharing class ReportDetailsController
     { }
     @AuraEnabled
     public static String getDriverManagerList(String accountId,String contactId,String reportId){
+        System.debug('In Class');
         List<Account> accList = [SELECT id,name,CreatedDate FROM Account WHERE id =:accountId];       
         if(accList.size() > 0){
             AccountYear = Date.valueof(accList[0].CreatedDate).year();
@@ -591,6 +592,7 @@ public with sharing class ReportDetailsController
                     if(checkLimit != null && checkLimit > 0){
                         query += ' limit ' + checkLimit + '';
                     }
+                    System.debug(query);
                     List<Employee_Mileage__c> obj_contact_list = Database.query(query);                    
                     return JSON.serialize(obj_contact_list);
                 }            

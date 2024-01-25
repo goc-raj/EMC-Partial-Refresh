@@ -55,10 +55,6 @@ export default class AdminLoginForm extends LightningElement {
             this.template.querySelector('.field-container2').classList.add('field-error');
         }
         else if(this.inputFields.email.length != 0) {
-            console.log('Email : ' + this.inputFields.email);
-            console.log('Type Email : ' + typeof(this.inputFields.email));
-            console.log('Pass : ' + this.inputFields.passwd);
-            console.log('Type Pass : ' + typeof(this.inputFields.passwd));
             login({
                 username: this.inputFields.email,
                 password: this.inputFields.passwd
@@ -76,7 +72,6 @@ export default class AdminLoginForm extends LightningElement {
                             if(resObj.remainingAttempt != 0) {
                                 this.template.querySelector('.errorText').innerHTML = "You have " + resObj.remainingAttempt  + " attempts before you are locked out.";
                             } else {
-                                console.log('Inside Lockedout');
                                 this.template.querySelectorAll('.field-input').forEach(element => {
                                     element.disabled = true;
                                 });

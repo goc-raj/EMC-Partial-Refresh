@@ -4,13 +4,14 @@
 /* eslint-disable @lwc/lwc/no-async-operation */
 import { LightningElement, api, track } from "lwc";
 import resourceImage from "@salesforce/resourceUrl/mBurseCss";
+import { NavigationMixin } from "lightning/navigation";
 import approveMileagesClone from "@salesforce/apex/ManagerDashboardController.approveMileagesClone";
 import CheckBatchStatus from "@salesforce/apex/ManagerDashboardController.CheckBatchStatus";
 import UpdatedReimList from "@salesforce/apex/ManagerDashboardController.UpdatedReimList";
 import MassSyncTripsForBiweek from "@salesforce/apex/ManagerDashboardController.MassSyncTripsForBiweek";
 import MassSyncTrips from "@salesforce/apex/ManagerDashboardController.MassSyncTrips";
 import { toastEvents } from "c/utils";
-export default class UserMileageGrid extends LightningElement {
+export default class UserMileageGrid extends NavigationMixin(LightningElement) {
   @api contactList;
   @api contactInfo;
   @api accountId;
@@ -22,6 +23,8 @@ export default class UserMileageGrid extends LightningElement {
   @api isAccountBiweek;
   @api singleUser;
   @api userList;
+  @track recordPageUrl;
+  @track recordPageUrlTeam;
   sortable = true;
   modalOpen = false;
   isRecord = false;
@@ -30,12 +33,12 @@ export default class UserMileageGrid extends LightningElement {
   _flag = false;
   isFalse = false;
   typeFilter = "";
-  _value = ""
+  _value = "";
   syStartDate = "";
   syEndDate = "";
   syncMonth = "";
-  tripStatus = 'U';
-  activity = 'Business';
+  tripStatus = "U";
+  activity = "Business";
   unapprovereimbursements = [];
   headerModalText = "";
   modalClass = "";
@@ -45,64 +48,64 @@ export default class UserMileageGrid extends LightningElement {
   styleHeader = "";
   styleClosebtn = "";
   classToTable = "fixed-container";
-  noMessage = 'There is no data available';
+  noMessage = "There is no data available";
   originalSelectList = [];
   allReimbursementList = [];
   selectList = [
     {
       id: 1,
       label: "This Page",
-      value: "This Page"
+      value: "This Page",
     },
     {
       id: 2,
       label: "All Pages",
-      value: "All Pages"
+      value: "All Pages",
     },
     {
       id: 3,
       label: "None",
-      value: "None"
-    }
+      value: "None",
+    },
   ];
 
   typeList = [
     {
       id: 1,
       label: "High Risk",
-      value: "High Risk"
+      value: "High Risk",
     },
     {
       id: 2,
       label: "All Trips",
-      value: "All Trips"
-    }
+      value: "All Trips",
+    },
   ];
 
   allTeam = [
     {
       id: 1,
       label: "My Team",
-      value: "My Team"
+      value: "My Team",
     },
     {
       id: 2,
       label: "Company",
-      value: "Company"
-    }
+      value: "Company",
+    },
   ];
 
   teamList = [
     {
       id: 1,
       label: "My Team",
-      value: "My Team"
+      value: "My Team",
     },
     {
       id: 2,
       label: "Company",
-      value: "Company"
-    }
+      value: "Company",
+    },
   ];
 
   @track modelList = [];
@@ -126,7 +129,7 @@ export default class UserMileageGrid extends LightningElement {
       colName: "name",
       colType: "String",
       arrUp: false,
-      arrDown: false
+      arrDown: false,
     },
     {
       id: 2,
@@ -134,8 +137,8 @@ export default class UserMileageGrid extends LightningElement {
       colName: "totalMileages",
       colType: "Decimal",
       arrUp: false,
-      arrDown: false
-    }
+      arrDown: false,
+    },
   ];
   tripKeyFields = ["name", "totalMileages"];
   tripListColumn = [
@@ -145,7 +148,7 @@ export default class UserMileageGrid extends LightningElement {
       colName: "name",
       colType: "String",
       arrUp: false,
-      arrDown: false
+      arrDown: false,
     },
     {
       id: 2,
@@ -153,7 +156,7 @@ export default class UserMileageGrid extends LightningElement {
       colName: "totalMileages",
       colType: "Decimal",
       arrUp: false,
-      arrDown: false
+      arrDown: false,
     },
     {
       id: 3,
@@ -161,8 +164,8 @@ export default class UserMileageGrid extends LightningElement {
       colName: "rejectedMileges",
       colType: "Decimal",
       arrUp: false,
-      arrDown: false
-    }
+      arrDown: false,
+    },
   ];
   tripListKeyFields = ["name", "totalMileages", "rejectedMileges"];
   searchIcon = resourceImage + "/mburse/assets/mBurse-Icons/Vector.png";
@@ -216,6 +219,24 @@ export default class UserMileageGrid extends LightningElement {
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   }
 
+  getUrl(data) {
+    var hash, value;
+    hash = location.hash;
+    value = this.role + hash;
+    return this[NavigationMixin.GenerateUrl]({
+      type: "comm__namedPage",
+      attributes: {
+        name: "dashboard__c",
+      },
+      state: {
+        accid: this.accountId,
+        id: this.contactId,
+        showteam: data,
+        profile: value,
+      },
+    });
+  }
+
   dynamicBinding(data, keyFields) {
     data.forEach((element) => {
       let model = [];
@@ -250,8 +271,8 @@ export default class UserMileageGrid extends LightningElement {
     });
   }
 
-  @api singleUserList(){
-     this.singleUser = true
+  @api singleUserList() {
+    this.singleUser = true;
   }
 
   resetMileage(list) {
@@ -342,12 +363,12 @@ export default class UserMileageGrid extends LightningElement {
     //console.log("event-->", JSON.parse(event.detail), JSON.parse(event.detail).length);
   }
 
-  handleClearInput(){
+  handleClearInput() {
     this._value = "";
     this.isSearchEnable = this._value === "" ? true : false;
     this.template
-    .querySelector("c-user-preview-table")
-    .searchByKey(this._value);
+      .querySelector("c-user-preview-table")
+      .searchByKey(this._value);
   }
 
   handleSearchEvent(event) {
@@ -365,7 +386,7 @@ export default class UserMileageGrid extends LightningElement {
       item = { id: 2, label: "All Pages", value: "All Pages" };
     arrayElement = this.selectList;
     originalItem = this.selectList;
-    let eventAt = (event.detail) ? event.detail : event;
+    let eventAt = event.detail ? event.detail : event;
     if (eventAt < 2) {
       this.selectList = arrayElement.filter(function (a) {
         return a.value !== "All Pages";
@@ -435,41 +456,46 @@ export default class UserMileageGrid extends LightningElement {
   }
 
   handleTeamChange(event) {
+    var _self = this, navigateUrl;
     let teamInput = event.detail.value;
     if (teamInput) {
       if (teamInput === "My Team") {
-        let urlRedirect =
+        /* let urlRedirect =
           location.origin +
           location.pathname +
           "?accid=" +
-          this.getUrlParamValue(window.location.href, "accid") +
+          this.getUrlParamValue(location.href, "accid") +
           "&id=" +
-          this.getUrlParamValue(window.location.href, "id") +
+          this.getUrlParamValue(location.href, "id") +
           "&showteam=false" +
           location.hash;
-        location.assign(urlRedirect);
+        location.assign(urlRedirect);*/
+        navigateUrl = location.origin + decodeURIComponent(_self.recordPageUrlTeam)
+        location.replace(navigateUrl)
       } else {
-        let urlRedirect =
+        /*let urlRedirect =
           location.origin +
           location.pathname +
           "?accid=" +
-          this.getUrlParamValue(window.location.href, "accid") +
+          this.getUrlParamValue(location.href, "accid") +
           "&id=" +
-          this.getUrlParamValue(window.location.href, "id") +
+          this.getUrlParamValue(location.href, "id") +
           "&showteam=true" +
           location.hash;
-        location.assign(urlRedirect);
+        location.assign(urlRedirect);*/
+        navigateUrl = location.origin + decodeURIComponent(_self.recordPageUrl)
+        location.replace(navigateUrl)
       }
     }
   }
 
   handleTypeChange(event) {
-    if(this.endProcess){
-      this.template.querySelector(
-        'c-dropdown-select[data-id="typeSelect"]'
-      ).selection();
-      this.showModal()
-    }else{
+    if (this.endProcess) {
+      this.template
+        .querySelector('c-dropdown-select[data-id="typeSelect"]')
+        .selection();
+      this.showModal();
+    } else {
       let element = this.originalModelList;
       let type = event.detail ? event.detail.value : event;
       this.typeFilter = type;
@@ -495,7 +521,6 @@ export default class UserMileageGrid extends LightningElement {
         if (
           this.template.querySelector('c-dropdown-select[data-id="typeSelect"]')
         ) {
-         
           this.template.querySelector(
             'c-dropdown-select[data-id="typeSelect"]'
           ).selectedValue = "High Risk";
@@ -631,8 +656,12 @@ export default class UserMileageGrid extends LightningElement {
     // console.log( "original----",this.template.querySelector('c-user-preview-table').returnSearchList())
     // console.log("search", this.searchmodelList.search, this.searchmodelList)
     // this.modelList =  this.template.querySelector('c-user-preview-table').returnList();
-   // content = this.modelList;
-    content = (this.searchmodelList.content) ? (this.searchmodelList.content.length > 0) ? this.searchmodelList.content : this.modelList : this.modelList;
+    // content = this.modelList;
+    content = this.searchmodelList.content
+      ? this.searchmodelList.content.length > 0
+        ? this.searchmodelList.content
+        : this.modelList
+      : this.modelList;
     //  console.log('search----',this.searchmodelList);
     //  console.log(this.modelList);
     boolean = this.checkUncheckRow(target, checkbox, content);
@@ -730,7 +759,7 @@ export default class UserMileageGrid extends LightningElement {
 
   redirectModal(event) {
     const redirectEvent = new CustomEvent("preview", {
-      detail: { data: event.detail, type: this.typeFilter }
+      detail: { data: event.detail, type: this.typeFilter },
     });
     this.dispatchEvent(redirectEvent);
   }
@@ -758,22 +787,24 @@ export default class UserMileageGrid extends LightningElement {
     if (this.modelList) {
       this.isSubmitVisible = false;
       this.modelList = this.sort(this.modelList, "name");
-      if(this.template.querySelector('.filter-input')){
-        this.template.querySelector('.filter-input').value = '';
+      if (this.template.querySelector(".filter-input")) {
+        this.template.querySelector(".filter-input").value = "";
         this.isSearchEnable = true;
       }
       this.template
         .querySelector("c-user-preview-table")
         .refreshTable(this.modelList);
-      this.template.querySelector('c-user-preview-table').defaultSort('name', 'String', 'desc')
+      this.template
+        .querySelector("c-user-preview-table")
+        .defaultSort("name", "String", "desc");
     }
   }
 
-  getAllUsers(){
+  getAllUsers() {
     this.singleUser = false;
-    if(this.userList){
-      let b = JSON.parse(this.userList)
-      this.resetViewList(b)
+    if (this.userList) {
+      let b = JSON.parse(this.userList);
+      this.resetViewList(b);
     }
   }
 
@@ -785,7 +816,9 @@ export default class UserMileageGrid extends LightningElement {
     this.originalModelList = element;
     if (this.typeFilter === "High Risk") {
       this.highRiskList = element.filter(function (m) {
-        return (m.totalHighRiskMileages > "0.00" && m.totalHighRiskMileages != null)
+        return (
+          m.totalHighRiskMileages > "0.00" && m.totalHighRiskMileages != null
+        );
       });
       this.tripColumn[1].colName = "totalHighRiskMileages";
       this.tripListColumn[1].colName = "totalHighRiskMileages";
@@ -852,7 +885,7 @@ export default class UserMileageGrid extends LightningElement {
     var errResult, toast, message, batchId;
     this.islockdate = false;
     CheckBatchStatus({
-      batchprocessid: runTime.Id
+      batchprocessid: runTime.Id,
     })
       .then((result) => {
         console.log("CheckBatchStatus", result);
@@ -874,7 +907,7 @@ export default class UserMileageGrid extends LightningElement {
           if (result === "Completed") {
             this.dispatchEvent(
               new CustomEvent("show", {
-                detail: "spinner"
+                detail: "spinner",
               })
             );
             this.unapprovereimbursements = [];
@@ -894,12 +927,12 @@ export default class UserMileageGrid extends LightningElement {
             }
             this.msg = "";
             this.msg = "Mileage has been approved.";
-            this.singleUser = false
+            this.singleUser = false;
             UpdatedReimList({
               did: this.contactId,
               accid: this.accountId,
               showTeamRecord: this.showTeam,
-              role: this.role
+              role: this.role,
             })
               .then((a) => {
                 if (a != null && a !== "") {
@@ -908,14 +941,12 @@ export default class UserMileageGrid extends LightningElement {
                   console.log("UpdatedReimList", a);
                   console.log("UpdatedReimList", a);
                   this.endProcess = false;
-                  /* Bad Escaped */
-                  let escapedData = a[1].replace(/\'/g,"\\")
-                  let reimList = JSON.parse(escapedData);
+                  let reimList = JSON.parse(a[1]);
                   this.resetViewList(reimList);
                 }
                 this.dispatchEvent(
                   new CustomEvent("hide", {
-                    detail: "spinner"
+                    detail: "spinner",
                   })
                 );
                 if (this.modalOpen) {
@@ -950,7 +981,7 @@ export default class UserMileageGrid extends LightningElement {
           } else if (result.includes("Failed=")) {
             this.dispatchEvent(
               new CustomEvent("hide", {
-                detail: "spinner"
+                detail: "spinner",
               })
             );
             if (this.modalOpen) {
@@ -965,7 +996,7 @@ export default class UserMileageGrid extends LightningElement {
           } else {
             this.dispatchEvent(
               new CustomEvent("hide", {
-                detail: "spinner"
+                detail: "spinner",
               })
             );
             // if(this.modalOpen){
@@ -1032,7 +1063,6 @@ export default class UserMileageGrid extends LightningElement {
       sec.toString()
     );
   }
-  
 
   approvalProcess() {
     var toastMessage, message;
@@ -1048,20 +1078,20 @@ export default class UserMileageGrid extends LightningElement {
     this.contentMessage = "Updating Reimbursements";
     this.dispatchEvent(
       new CustomEvent("show", {
-        detail: "spinner"
+        detail: "spinner",
       })
     );
     approveMileagesClone({
       mileages: JSON.stringify(this.myTeamReimbursement),
       did: this.contactId,
       accid: this.accountId,
-      showTeamRecord: this.showTeam
+      showTeamRecord: this.showTeam,
     })
       .then((result) => {
         if (result != null) {
           this.dispatchEvent(
             new CustomEvent("hide", {
-              detail: "spinner"
+              detail: "spinner",
             })
           );
           console.log("approveMileagesClone Result", result);
@@ -1074,7 +1104,7 @@ export default class UserMileageGrid extends LightningElement {
       .catch((error) => {
         this.dispatchEvent(
           new CustomEvent("hide", {
-            detail: "spinner"
+            detail: "spinner",
           })
         );
         if (Array.isArray(error.body)) {
@@ -1088,23 +1118,22 @@ export default class UserMileageGrid extends LightningElement {
       });
   }
 
-  cancelApproval(){
+  cancelApproval() {
     this.islockdate = false;
     if (this.template.querySelector("c-user-profile-modal")) {
       this.template.querySelector("c-user-profile-modal").hide();
     }
-    this.resetList(this.originalModelList)
+    this.resetList(this.originalModelList);
   }
 
-  closeModal(){
-    if(this.islockdate){
-      this.resetList(this.originalModelList)
-      this.islockdate = false
+  closeModal() {
+    if (this.islockdate) {
+      this.resetList(this.originalModelList);
+      this.islockdate = false;
     }
   }
 
-
-  handleApproval(){
+  handleApproval() {
     if (this.template.querySelector("c-user-profile-modal")) {
       this.template.querySelector("c-user-profile-modal").hide();
     }
@@ -1121,7 +1150,7 @@ export default class UserMileageGrid extends LightningElement {
             this.myTeamReimbursement.includes(data[i].reimbursementIdList[j])
           ) {
             if (data[i].lockDate !== null) {
-              if(data[i].lockDate !== ''){
+              if (data[i].lockDate !== "") {
                 lockdatecount++;
               }
             }
@@ -1133,7 +1162,7 @@ export default class UserMileageGrid extends LightningElement {
     if (lockdatecount > 0) {
       let lockDate = this.modelList[0].lockDate;
       let currentDateLocked = new Date(lockDate);
-      console.log("date", lockDate, currentDateLocked)
+      console.log("date", lockDate, currentDateLocked);
       //let lockedMonth = currentDateLocked.toLocaleString('default', { month: 'long' });
       this.islockdate = true;
       this.headerModalText = "Mileage Lock Date";
@@ -1169,18 +1198,18 @@ export default class UserMileageGrid extends LightningElement {
       }
     });
 
-    if(this.isAccountBiweek) {
-      console.log("Inside biweek", this.isAccountBiweek)
+    if (this.isAccountBiweek) {
+      console.log("Inside biweek", this.isAccountBiweek);
       MassSyncTripsForBiweek({
         biWeek: JSON.stringify(element),
-        accID: this.accountId
+        accID: this.accountId,
       })
         .then((result) => {
           if (result) {
             let toast = {
               type: "success",
               message:
-                "The mileage is syncing in background. It could take up to a minute for sync to mileage."
+                "The mileage is syncing in background. It could take up to a minute for sync to mileage.",
             };
             toastEvents(this, toast);
             setTimeout(function () {
@@ -1191,25 +1220,25 @@ export default class UserMileageGrid extends LightningElement {
         .catch((error) => {
           console.log("Error", error);
         });
-    }else{
-      console.log("Inside monthly", this.isAccountBiweek)
+    } else {
+      console.log("Inside monthly", this.isAccountBiweek);
       let dates = this.getStartAndEndDate(this.syncMonth);
-			this.syStartDate = dates?.startDate;
-			this.syEndDate = dates?.endDate;
+      this.syStartDate = dates?.startDate;
+      this.syEndDate = dates?.endDate;
       MassSyncTrips({
-				accountId: this.accountId, 
-				startDate: this.syStartDate, 
-				endDate: this.syEndDate, 
-				month : this.syncMonth,
-				tripStatus: this.tripStatus,
-        activityStatus: this.activity
-			})
+        accountId: this.accountId,
+        startDate: this.syStartDate,
+        endDate: this.syEndDate,
+        month: this.syncMonth,
+        tripStatus: this.tripStatus,
+        activityStatus: this.activity,
+      })
         .then((result) => {
           if (result) {
             let toast = {
               type: "success",
               message:
-                "The mileage is syncing in background. It could take up to a minute for sync to mileage."
+                "The mileage is syncing in background. It could take up to a minute for sync to mileage.",
             };
             toastEvents(this, toast);
             setTimeout(function () {
@@ -1221,7 +1250,7 @@ export default class UserMileageGrid extends LightningElement {
           console.log("Error", error);
         });
     }
-  
+
     console.log("Reimbu-->", JSON.stringify(this.allReimbursementList));
   }
 
@@ -1230,15 +1259,25 @@ export default class UserMileageGrid extends LightningElement {
   }
 
   getStartAndEndDate(dateString) {
-		const [month, year] = dateString.split('-');
-		const startDate = new Date(year, month - 1, 1);
-		const endDate = new Date(year, month, 0);
-	  
-		const formattedStartDate = `${(startDate.getMonth() + 1).toString().padStart(2, '0')}/${startDate.getDate().toString().padStart(2, '0')}/${startDate.getFullYear()}`;
-		const formattedEndDate = `${(endDate.getMonth() + 1).toString().padStart(2, '0')}/${endDate.getDate().toString().padStart(2, '0')}/${endDate.getFullYear()}`;
-	  
-		return { startDate: formattedStartDate, endDate: formattedEndDate };
-	}
+    const [month, year] = dateString.split("-");
+    const startDate = new Date(year, month - 1, 1);
+    const endDate = new Date(year, month, 0);
+
+    const formattedStartDate = `${(startDate.getMonth() + 1)
+      .toString()
+      .padStart(2, "0")}/${startDate
+      .getDate()
+      .toString()
+      .padStart(2, "0")}/${startDate.getFullYear()}`;
+    const formattedEndDate = `${(endDate.getMonth() + 1)
+      .toString()
+      .padStart(2, "0")}/${endDate
+      .getDate()
+      .toString()
+      .padStart(2, "0")}/${endDate.getFullYear()}`;
+
+    return { startDate: formattedStartDate, endDate: formattedEndDate };
+  }
 
   downloadAllTrips() {
     console.log("Type--", this.typeFilter);
@@ -1256,7 +1295,7 @@ export default class UserMileageGrid extends LightningElement {
       "Approval Date",
       "Lock Date/Report Run",
       "Managers Name",
-      "Managers Email"
+      "Managers Email",
     ]);
     excelList.forEach((item) => {
       mileage.push([
@@ -1270,19 +1309,19 @@ export default class UserMileageGrid extends LightningElement {
         item.approvedDate,
         item.lockDate,
         item.managerName,
-        item.managerEmail
+        item.managerEmail,
       ]);
     });
     this.excelToExport(mileage, fileName, sheetName);
   }
 
-  revertHandler(){
+  revertHandler() {
     this.dispatchEvent(
       new CustomEvent("back", {
-          detail: ''
+        detail: "",
       })
-   );
-   // window.history.go(window.history.length - window.history.length - 1);
+    );
+    // window.history.go(window.history.length - window.history.length - 1);
   }
 
   renderedCallback() {
@@ -1291,7 +1330,7 @@ export default class UserMileageGrid extends LightningElement {
       this.template.querySelector('c-dropdown-select[data-id="teamSelect"]'),
       this.teamList
     );
-    let showTeamValue = this.getUrlParamValue(window.location.href, "showteam");
+    let showTeamValue = this.getUrlParamValue(location.href, "showteam");
     if (this.showTeam) {
       if (showTeamValue === "false") {
         if (
@@ -1348,20 +1387,28 @@ export default class UserMileageGrid extends LightningElement {
           //   .removeHidden("High Risk");
         }
       } else {
-        if (this.typeFilter === 'High Risk') {
-            if (this.template.querySelector('c-dropdown-select[data-id="typeSelect"]')) {
-              this.template.querySelector(
-                'c-dropdown-select[data-id="typeSelect"]'
-              ).selectedValue = "High Risk";
-              this.template
-                .querySelector('c-dropdown-select[data-id="typeSelect"]')
-                .toggleSelected("High Risk");
-              this.template
-                .querySelector('c-dropdown-select[data-id="typeSelect"]')
-                .removeHidden("All Trips");
+        if (this.typeFilter === "High Risk") {
+          if (
+            this.template.querySelector(
+              'c-dropdown-select[data-id="typeSelect"]'
+            )
+          ) {
+            this.template.querySelector(
+              'c-dropdown-select[data-id="typeSelect"]'
+            ).selectedValue = "High Risk";
+            this.template
+              .querySelector('c-dropdown-select[data-id="typeSelect"]')
+              .toggleSelected("High Risk");
+            this.template
+              .querySelector('c-dropdown-select[data-id="typeSelect"]')
+              .removeHidden("All Trips");
           }
-       } else {
-          if (this.template.querySelector('c-dropdown-select[data-id="typeSelect"]')) {
+        } else {
+          if (
+            this.template.querySelector(
+              'c-dropdown-select[data-id="typeSelect"]'
+            )
+          ) {
             this.template.querySelector(
               'c-dropdown-select[data-id="typeSelect"]'
             ).selectedValue = "All Trips";
@@ -1374,7 +1421,6 @@ export default class UserMileageGrid extends LightningElement {
           }
         }
       }
-      
     }
 
     //    let selectedValue = sessionStorage.getItem("selected");
@@ -1402,16 +1448,18 @@ export default class UserMileageGrid extends LightningElement {
   connectedCallback() {
     sessionStorage.removeItem("Batch-Id");
     const formatter = new Intl.DateTimeFormat("default", {
-      month: "numeric", year: "numeric"
+      month: "numeric",
+      year: "numeric",
     });
     const date = new Date();
+    const _self = this;
     let number = 1;
     let prevMonth = formatter.format(
       new Date(date.getFullYear(), date.getMonth() - `${number}`)
     );
-    let prevList = prevMonth.split('/');
-    prevList[0] = prevList[0].padStart(2, '0');
-    this.syncMonth = prevList.join('-');
+    let prevList = prevMonth.split("/");
+    prevList[0] = prevList[0].padStart(2, "0");
+    this.syncMonth = prevList.join("-");
     let count = 0;
     this.isScrollable = true;
     this.paginatedModal = true;
@@ -1419,12 +1467,29 @@ export default class UserMileageGrid extends LightningElement {
     this.isCheckbox = true;
     this.modalListColumn = [];
     this.modalKeyFields = [];
+    this.getUrl("true")
+      .then(function (data) {
+        _self.recordPageUrl = data;
+      })
+      .catch((err) => {
+        console.log("Err from url", err.message);
+      });
+
+    this.getUrl("false")
+      .then(function (data) {
+        _self.recordPageUrlTeam = data;
+      })
+      .catch((err) => {
+        console.log("Err from url", err.message);
+      });
+     
     if (this.contactList) {
       this.modelList = this.proxyToObject(this.contactList);
       this.originalModelList = this.proxyToObject(this.contactList);
       this.classToTable =
         this.modelList.length > 5
-          ? 'fixed-container' : 'fixed-container overflow-none';
+          ? "fixed-container"
+          : "fixed-container overflow-none";
       if (this.filter === "High Risk") {
         this.typeFilter = this.filter;
         let element = this.originalModelList;
@@ -1467,7 +1532,6 @@ export default class UserMileageGrid extends LightningElement {
           }
         });
 
-
         if (count > 0) {
           this.modalListColumn = this.tripListColumn;
           this.modalKeyFields = this.tripListKeyFields;
@@ -1478,7 +1542,6 @@ export default class UserMileageGrid extends LightningElement {
 
         this.dynamicBinding(this.modelList, this.modalKeyFields);
       }
-
 
       this.isRecord = this.modelList.length > 0 ? true : false;
       // this.modelList.forEach((el)=>{

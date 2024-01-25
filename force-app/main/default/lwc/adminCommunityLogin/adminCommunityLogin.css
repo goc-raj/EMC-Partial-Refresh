@@ -1,7 +1,3 @@
-/* :host {
-    margin: 0;
-} */
-
 .main-container {
     width: 100%;
     display: flex;
@@ -34,17 +30,17 @@
 }
 
 
-/* Responsive styles for different devices */
+/* Responsive Styles */
 
+/* Tablet Device */
 @media only screen and (max-width: 768px) {
-    /* Styles for tablet devices */
     .sub-container {
         width: 80%;
     }
 }
 
+/* Mobile Device */
 @media only screen and (max-width: 425px) {
-    /* Styles for mobile devices */
     .sub-container {
         width: 90%;
         height: 450px;
