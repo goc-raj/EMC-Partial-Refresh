@@ -1,16 +1,10 @@
 import { LightningElement, track, api, wire } from 'lwc';
-import Profile from '@salesforce/schema/User.ProfileId';
 import videoLink from '@salesforce/apex/GetDriverData.getVideoLink';
-import { getRecord } from 'lightning/uiRecordApi';
-import USER_ID from '@salesforce/user/Id';
-import getProfile from '@salesforce/apex/LoginRedirectionCommunity.getProfile';
-import { CurrentPageReference} from 'lightning/navigation';
 
 export default class AdminLWR extends LightningElement {
     contactId;
     accountId;
     isTeamShow;
-    currentUserProfileId;
     role;
     customSetting;
 
@@ -18,29 +12,19 @@ export default class AdminLWR extends LightningElement {
         return new URL(url).searchParams.get(key);
     }
     
-    /*constructor(){
+    constructor(){
         super();
         console.log("inside constructor")
-        getProfile().then(data=>{
-            console.log("Res", data)
-            if(data){
-                this.currentUserProfileId = data?.ProfileId;
-                this.Role = (this.currentUserProfileId === '00e31000001FRDWAA4' || this.currentUserProfileId === '00e31000001FRDXAA4') ? 'Manager' : (this.currentUserProfileId === '00e31000001FRDZAA4' || this.currentUserProfileId === '00e31000001FRDYAA4' || this.currentUserProfileId === '00eE1000000ZnAjIAK') ? 'Admin' : 'Driver'
-                console.log("Profile id", this.currentUserProfileId, "Role", this.Role)
-                videoLink()
-                .then((result)=>{
-                    if(result){
-                        this.customSetting = JSON.parse(result)
-                    }
-                        console.log("video list",result)
-                }).catch((err)=>{
-                        console.log("Error--", err.message)
-                })
+        videoLink()
+        .then((result)=>{
+            if(result){
+                this.customSetting = JSON.parse(result)
             }
+                console.log("video list",result)
         }).catch((err)=>{
-            console.log("Error--", err.message)
+                console.log("Error--", err.message)
         })
-    }*/
+    }
 
    /* @wire(CurrentPageReference) handleStateChange(pageReference) {
         if(pageReference){

@@ -1,5 +1,5 @@
 public with sharing class LoginRedirectionCommunity {
-  @AuraEnabled(cacheable=true)
+  @AuraEnabled
   public static object getParameters() {   
       User u = new User();         
       u = [SELECT id,Profile.Name,contactid,contact.Accountid,contact.showTeamRecord__c FROM user WHERE id =: userinfo.getuserid()];

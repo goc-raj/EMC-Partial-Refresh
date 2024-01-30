@@ -1,15 +1,18 @@
 <template>
-    <h1>Driver Profile - Welcome</h1>
+   <!-- <h1>Driver Profile - Welcome</h1>
     <template for:each={mileage} for:item="data">
         <lightning-button key={data.id} label="Map" onclick={showMap} data-id={data.id}></lightning-button>
-       <!-- <c-web-chat key={data.id} data-id={data.id} record-id={data.id} start-location-lt={data.latitude}
+       <c-web-chat key={data.id} data-id={data.id} record-id={data.id} start-location-lt={data.latitude}
         start-location-lg={data.longitude}
         end-location-lt={data.endlatitude}
         end-location-lg={data.endlongitude}
-        time-zone={data.timeZone} ></c-web-chat>-->
+        time-zone={data.timeZone} ></c-web-chat>
     </template>
     <template lwc:if={locationList}>
         <c-dashboard-map map-data={locationList} map-location={locations}></c-dashboard-map>
     </template>
-    <!-- <c-web-chat></c-web-chat> -->
+    <c-web-chat></c-web-chat> -->
+    <template lwc:if={role}>
+        <c-driver-profile-l-w-r contact-id={contactId} account-id={accountId} show-team={isTeamShow} profile={currentUserProfileId} user-role={role} custom-setting={customSetting}></c-driver-profile-l-w-r>
+    </template>
 </template>

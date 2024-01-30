@@ -18,6 +18,7 @@ export default class UserProfileLWR extends LightningElement {
     @api role;
     checkAll = false;
     canadaToggle = false;
+    isInitializedMap = false;
     driverUnapproveList;
     typeMap = 'USA';
     driverVisibleList;
@@ -154,11 +155,15 @@ export default class UserProfileLWR extends LightningElement {
       this.typeMap = (!this.checkAll) ? 'USA' : 'CANADA'
       console.log(this.typeMap, event.target.checked)
       this.locationList = (!this.checkAll) ? this.americanUser : this.canadianUser
-      this.template.querySelector('c-point-chloropleth').locate =  this.locationList;
-      this.template.querySelector('c-point-chloropleth').type = this.typeMap;
-      this.template.querySelector('c-point-chloropleth').reloadChart()
+      this.template.querySelector('c-map-chart-l-w-r').locate =  this.locationList;
+      this.template.querySelector('c-map-chart-l-w-r').type = this.typeMap;
+      this.template.querySelector('c-map-chart-l-w-r').reloadChart()
     }
   
+    scriptLoaded(){
+      this.isInitializedMap = true;
+      console.log("inside");
+    }
   
     getLocation(){
      // var tablediv = this.template.querySelector("parent");

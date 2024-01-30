@@ -20,12 +20,12 @@ export default class ToastLWR extends LightningElement {
     initToast(){
         toastr.options.positionClass = "toast-top-right";
         toastr.options.closeButton = true;
-        /*toastr.options.disableTimeOut = true;*/
+        toastr.options.disableTimeOut = true;
         toastr.options.progressBar = false;
         toastr.options.fadeOut = 6000;
-        /*toastr.options.timeOut = 0;
+        toastr.options.timeOut = 0;
         toastr.options.extendedTimeOut= 960000;
-        toastr.options.hideDuration = 0;*/
+        toastr.options.hideDuration = 0;
     }
 
     renderedCallback(){

@@ -141,13 +141,13 @@ export default class ReportDetail extends LightningElement {
     if (makeDate.getDate() > 25) {
       // makeDate.setMonth(makeDate.getMonth());
       makeDate.setMonth(makeDate.getMonth() + 1);
-      console.log('Current Month : ' + makeDate.getMonth());
       let lastmonth = makeDate.toLocaleString('default', { month: 'long' });
+      console.log('Current Month : ' + lastmonth);
       return lastmonth;
     } else {
       makeDate.setMonth(makeDate.getMonth());
-      console.log('Current Month : ' + makeDate.getMonth());
       let lastmonth = makeDate.toLocaleString('default', { month: 'long' });
+      console.log('Current Month : ' + lastmonth);
       return lastmonth;
     }
   }
@@ -160,7 +160,7 @@ export default class ReportDetail extends LightningElement {
         var payarray = new Array();
         payarray = result.split(",");
         let finaldata = JSON.parse(JSON.stringify(payarray));
-        console.log("finaldata", finaldata)
+        console.log("finaldata", JSON.stringify(finaldata));
         finaldata.forEach(element => {
           let list = element.split(' to ')[0];
           let list1 = element.split(' to ')[1];
@@ -237,7 +237,7 @@ export default class ReportDetail extends LightningElement {
                   reporttwodecimalfields = report.Two_Decimal_Places__c.split(',');
               }
               else {
-                  reporttwodecimalfields.push(report.Numeric_Fields__c.trim());
+                  reporttwodecimalfields.push(report.Two_Decimal_Places__c.trim());
               }
             }
 
@@ -1179,114 +1179,8 @@ export default class ReportDetail extends LightningElement {
         this.filterdata = JSON.parse(result);
         console.log("length1", JSON.stringify(this.filterdata));
         if (this.filterdata.length > 0) {
-          // if (this.reportName == 'Employee Roster Report') {
-          //   this.filterdata.forEach(element => {
-          //     if (element.Activation_Date__c != undefined) {
-          //       var actdate = element.Activation_Date__c;
-          //       element.Activation_Date__c = actdate.split('-')[1] + '/' + actdate.split('-')[2] + '/' + actdate.split('-')[0];
-          //     }
-          //     if (element.Deactivated_Date__c != undefined) {
-          //       var dctdate = element.Deactivated_Date__c;
-          //       element.Deactivated_Date__c = dctdate.split('-')[1] + '/' + (dctdate.split('-')[2]).slice(0, 2) + '/' + dctdate.split('-')[0];
-          //     }
-          //   })
-          // } else if (this.reportName == 'Onboarding Status Report') {
-          //   this.filterdata.forEach(element => {
-          //     if (element.Schedule_Driver_Meeting__c == true) {
-          //       element.Schedule_Driver_Meeting__c = 'Yes';
-          //     } else if (element.Schedule_Driver_Meeting__c == false) {
-          //       element.Schedule_Driver_Meeting__c = 'No';
-          //     }
-          //   })
-          // } else if (this.reportName == 'Commuter and Actual Mileage Report' || this.reportName == 'Trip Detail Report') {
-          //   this.filterdata.forEach(element => {
-          //     if (this.reportName == 'Commuter and Actual Mileage Report') {
-          //       if (element.Trip_Date__c != undefined) {
-          //         var actdate = element.Trip_Date__c;
-          //         element.Trip_Date__c = actdate.split('-')[1] + '/' + actdate.split('-')[2] + '/' + actdate.split('-')[0];
-          //       }
-          //       if (element.Approved_Date__c != undefined) {
-          //         var approvedt = element.Approved_Date__c;
-          //         element.Approved_Date__c = approvedt.split('-')[1] + '/' + approvedt.split('-')[2] + '/' + approvedt.split('-')[0];
-          //       }
-          //     }
-          //     if (element.ConvertedStartTime__c != undefined) {
-          //       var starttime = element.ConvertedStartTime__c;
-          //       var time = new Date(starttime);
-          //       var ampm = time.toLocaleString('en-US', { hour: 'numeric', hour12: true })
-          //       element.ConvertedStartTime__c = (starttime.split('T')[1]).slice(0, 5) + ' ' + ampm.split(' ')[1];
-          //     }
-          //     if (element.ConvertedEndTime__c != undefined) {
-          //       var endtime = element.ConvertedEndTime__c;
-          //       var time1 = new Date(endtime);
-          //       var ampm1 = time1.toLocaleString('en-US', { hour: 'numeric', hour12: true })
-          //       element.ConvertedEndTime__c = (endtime.split('T')[1]).slice(0, 5) + ' ' + ampm1.split(' ')[1];
-          //     }
-          //   })
-          // }
           this.showbuttons = true;
           this.recordDisplay = true;
-          // this.headerfields = new Map();
-          // for (var i = 0; i < this.detailsoql.length; i++) {
-          //   if (this.detailsoql[i].includes('.')) {
-          //     this.headerfields.set(this.detailsoql[i].split('.')[1], this.headerdata[i]);
-          //   } else {
-          //     this.headerfields.set(this.detailsoql[i], this.headerdata[i]);
-          //   }
-          // }
-          // this.headerfields.set('Id', 'Id');
-          // this.keyArray = [];
-          // for (var i = 0; i < this.filterdata.length; i++) {
-          //   Object.keys(this.filterdata[i]).forEach((key) => {
-          //     if (key != "attributes") {
-          //       if (typeof this.filterdata[i][key] == "object") {
-          //         this.nestedJsonRead(this.filterdata[i][key], i);
-          //       } else {
-          //         if (this.headerfields.has(key)) {
-          //           this.keyArray.push(i, this.headerfields.get(key), this.filterdata[i][key]);
-          //         }
-          //       }
-          //     }
-          //   })
-          // }
-          // this.keyArray = JSON.parse(JSON.stringify(this.keyArray))
-          // console.log("this.keyArray", this.keyArray)
-
-          // var temp1 = [];
-
-          // for (let k = 0; k < this.keyArray.length; k++) {
-          //   if (k % 3 == 0) {
-          //     temp1.push({ [this.keyArray[k + 1]]: this.keyArray[k + 2], index: this.keyArray[k] })
-          //   }
-          // }
-          // let temparray1 = JSON.parse(JSON.stringify(temp1));
-
-          // const groupedData1 = temparray1.reduce((result, item) => {
-          //   if (!result[item.index]) {
-          //     result[item.index] = [];
-          //   }
-
-          //   const newItem = { Id: item.Id };
-          //   Object.keys(item).forEach(key => {
-          //     if (key !== 'Id') {
-          //       newItem[key] = item[key];
-          //     }
-          //   });
-
-          //   result[item.index].push(newItem);
-          //   return result;
-          // }, []);
-          // // Log or use the grouped data
-          // let objarr = JSON.parse(JSON.stringify(groupedData1));
-          // console.log("objarr", objarr)
-          // for (var h = 0; h < objarr.length; h++) {
-
-          //   let finalObj1;
-          //   for (var n = 0; n < objarr[h].length; n++) {
-          //     finalObj1 = Object.assign({}, ...objarr[h]);
-          //   }
-          //   objarr[h] = finalObj1;
-          // }
 
           // Use commonFIlter to set data dynamically
           let formatted;
@@ -1457,6 +1351,7 @@ export default class ReportDetail extends LightningElement {
         this.finaldataSearch.forEach(row => {
           if (this.remId == row.Id) {
             if (row.hasOwnProperty(this.keyName)) {
+              console.log('Key Name : ' + this.keyName);
               row[this.keyName] = this.formatNumberWithCommas(this.keyValue);
               row['Total Reimbursement'] = this.totalsum.toLocaleString();
             }
@@ -1642,18 +1537,6 @@ export default class ReportDetail extends LightningElement {
         this.reportData = resultdata;
         console.log("resultdata", jsondata)
         this.reportType = resultdata.Report_Type__c;
-        // if (resultdata.Numeric_Fields__c != undefined) {
-        //   let numericfield = resultdata.Numeric_Fields__c
-        //   var headerarry = new Array();
-        //   headerarry = numericfield.split(",");
-        //   this.dateArray = JSON.parse(JSON.stringify(headerarry));
-        // }
-        // if (resultdata.Date_Fields__c != undefined) {
-        //   let datefield = resultdata.Date_Fields__c
-        //   var headerarry_date = new Array();
-        //   headerarry_date = datefield.split(",");
-        //   this.numberArray = JSON.parse(JSON.stringify(headerarry_date));
-        // }
 
         let showfilter = resultdata.Filter_By__c == undefined ? '' : resultdata.Filter_By__c
         this.reportName = resultdata.Name;
@@ -1738,25 +1621,7 @@ export default class ReportDetail extends LightningElement {
             console.log("error", error)
           })
 
-        // var headerstr = resultdata.Report_Header__c;
-        // var headerarry = new Array();
-        // headerarry = headerstr.split(",");
-        // this.headerdata = JSON.parse(JSON.stringify(headerarry));
-        // console.log('this.headerData : ' + this.headerdata);
-
-        // var detailstr = resultdata.Report_Soql__c;
-        // this.reportsoql = resultdata.Report_Soql__c;
-        // var detailarray = new Array();
-        // detailarray = detailstr.split(" ");
-        // let detaildata = JSON.parse(JSON.stringify(detailarray[1]))
-        // var detailarraynew = new Array();
-        // detailarraynew = detaildata.split(",");
-        // this.detail = detailarraynew;
-        // console.log('this.detail : ' + this.detail);
-        // let detaildatanew = JSON.parse(JSON.stringify(detailarraynew))
-        // this.detailsoql = JSON.parse(JSON.stringify(detailarraynew));
-        // console.log('this.detailsoql : ' + this.detailsoql);
-
+        console.log('Before Dropdown');
         getDriverManagerDropdownList({ accountId: this._accid, contactId: this._adminid, reportId: this.reportId, checkLimit: this.limitOfrecord })
           .then(result => {
             let data = JSON.parse(result);
@@ -1776,114 +1641,8 @@ export default class ReportDetail extends LightningElement {
               if (this.reportId == TripDetailReportSightScience) {
                 this.showEmailbtn = true;
               }
-              
-              // if (this.reportName == 'Employee Roster Report') {
-              //   this.detaildata.forEach(element => {
-              //     if (element.Activation_Date__c != undefined) {
-              //       var actdate = element.Activation_Date__c;
-              //       element.Activation_Date__c = actdate.split('-')[1] + '/' + actdate.split('-')[2] + '/' + actdate.split('-')[0];
-              //     }
-              //     if (element.Deactivated_Date__c != undefined) {
-              //       var dctdate = element.Deactivated_Date__c;
-              //       element.Deactivated_Date__c = dctdate.split('-')[1] + '/' + (dctdate.split('-')[2]).slice(0, 2) + '/' + dctdate.split('-')[0];
-              //     }
-              //   })
-              // } else if (this.reportName == 'Final Variable Report for Terminated Drivers') {
 
-              // } else if (this.reportName == 'Onboarding Status Report') {
-              //   this.detaildata.forEach(element => {
-              //     if (element.Schedule_Driver_Meeting__c == true) {
-              //       element.Schedule_Driver_Meeting__c = 'Yes';
-              //     } else if (element.Schedule_Driver_Meeting__c == false) {
-              //       element.Schedule_Driver_Meeting__c = 'No';
-              //     }
-
-              //     // if(element.Activation_Date__c != undefined){
-              //     //   var activationdate = element.Activation_Date__c;
-              //     //   element.Activation_Date__c = activationdate.split('-')[2]+'-'+activationdate.split('-')[1]+'-'+activationdate.split('-')[0];
-              //     // }
-              //   })
-              // } else if (this.reportName == 'Commuter and Actual Mileage Report' || this.reportName == 'Trip Detail Report') {
-              //   this.detaildata.forEach(element => {
-              //     if (this.reportName == 'Commuter and Actual Mileage Report') {
-              //       if (element.Trip_Date__c != undefined) {
-              //         var actdate = element.Trip_Date__c;
-              //         element.Trip_Date__c = actdate.split('-')[1] + '/' + actdate.split('-')[2] + '/' + actdate.split('-')[0];
-              //       }
-              //       if (element.Approved_Date__c != undefined) {
-              //         var approvedt = element.Approved_Date__c;
-              //         element.Approved_Date__c = approvedt.split('-')[1] + '/' + approvedt.split('-')[2] + '/' + approvedt.split('-')[0];
-              //       }
-              //     }
-              //     if (element.ConvertedStartTime__c != undefined) {
-              //       var starttime = element.ConvertedStartTime__c;
-              //       var time = new Date(starttime);
-              //       console.log('Time : ' + time);
-              //       var ampm = time.toLocaleString('en-US', { hour: 'numeric', hour12: true })
-              //       console.log('AMPM : ' + ampm);
-              //       element.ConvertedStartTime__c = (starttime.split('T')[1]).slice(0, 5) + ' ' + ampm.split(' ')[1];
-              //     }
-              //     if (element.ConvertedEndTime__c != undefined) {
-              //       var endtime = element.ConvertedEndTime__c;
-              //       var time1 = new Date(endtime);
-              //       var ampm1 = time1.toLocaleString('en-US', { hour: 'numeric', hour12: true })
-              //       element.ConvertedEndTime__c = (endtime.split('T')[1]).slice(0, 5) + ' ' + ampm1.split(' ')[1];
-              //     }
-              //   })
-              // }
               this.recordDisplay = true;
-
-              // this.headerfields = new Map();
-              // for (var i = 0; i < detaildatanew.length; i++) {
-              //   if (detaildatanew[i].includes('.')) {
-              //     this.headerfields.set(detaildatanew[i].split('.')[1], this.headerdata[i]);
-              //   } else {
-              //     this.headerfields.set(detaildatanew[i], this.headerdata[i]);
-              //   }
-              // }
-              // this.headerfields.set('Id', 'Id');
-              // console.log("this.headerfields", this.headerfields);
-
-              // for (var i = 0; i < this.detaildata.length; i++) {
-              //   Object.keys(this.detaildata[i]).forEach((key) => {
-              //     if (key != "attributes") {
-              //       if (typeof this.detaildata[i][key] == "object") {
-              //         this.nestedJsonRead(this.detaildata[i][key], i);
-              //       } else {
-              //         if (this.headerfields.has(key)) {
-              //           this.keyArray.push(i, this.headerfields.get(key), this.detaildata[i][key]);
-              //         }
-              //       }
-              //     }
-              //   })
-              // }
-              // console.log("keyArray", JSON.stringify(this.keyArray));
-              // var temp = [];
-
-              // for (let k = 0; k < this.keyArray.length; k++) {
-              //   if (k % 3 == 0) {
-              //     temp.push({ [this.keyArray[k + 1]]: this.keyArray[k + 2], index: this.keyArray[k] })
-              //   }
-              // }
-              // let temparray = JSON.parse(JSON.stringify(temp));
-
-              // let groupedData = [];
-              // for (var i = 0; i < temparray.length; i++) {
-              //   var item = temparray[i];
-              //   if (!groupedData[item.index]) {
-              //     groupedData[item.index] = [];
-              //   }
-              //   var m = 0;
-              //   Object.keys(item).forEach(key => {
-              //     m = m + 1;
-              //     if (m == 1) {
-              //       groupedData[item.index].push({ [key]: item[key] });
-              //     }
-              //   });
-              // }
-              // // Log or use the grouped data
-              // let objarray = JSON.parse(JSON.stringify(groupedData));
-              // console.log("objarray", JSON.stringify(objarray));
 
               let formatted;
               if(this.originalData){
@@ -1923,13 +1682,6 @@ export default class ReportDetail extends LightningElement {
               console.log("this.header", this.header);
               // Added by Raj
 
-              // for (var h = 0; h < objarray.length; h++) {
-              //   let finalObj;
-              //   for (var n = 0; n < objarray[h].length; n++) {
-              //     finalObj = Object.assign({}, ...objarray[h]);
-              //   }
-              //   objarray[h] = finalObj;
-              // }
               this.finaldata = JSON.parse(JSON.stringify(formatted));
               console.log("final data : ", JSON.stringify(this.finaldata));
               this.exceldata = JSON.parse(JSON.stringify(formatted));

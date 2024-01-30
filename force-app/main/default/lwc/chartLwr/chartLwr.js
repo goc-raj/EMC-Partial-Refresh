@@ -9,6 +9,7 @@ export default class ChartLwr extends LightningElement {
     wide = false;
     chartV;
     subscription = null;
+    jsInitialized = false;
 
     @wire(MessageContext) messageContext;
 
@@ -393,57 +394,6 @@ export default class ChartLwr extends LightningElement {
         }
     }
 
-    connectedCallback() {
-
-        loadScript(this, highchartsResource + "/highcharts.js")
-
-            .then(() => {
-
-                console.log("SUCCESS: highcharts.js");
-
-                loadScript(this, highchartsResource + "/exporting.js")
-
-                    .then(() => {
-
-                        console.log("SUCCESS: exporting.js");
-
-                        loadScript(this, highchartsResource + "/export-data.js")
-
-                            .then(() => {
-
-                                console.log("SUCCESS: export-data.js");
-
-
-                                loadScript(this, highchartsResource + "/accessibility.js")
-
-                                    .then(() => {
-
-                                        console.log("SUCCESS: accessibility.js");
-                                        try{
-                                            this.runHighcharts();
-                                        }catch(e){
-                                            console.log("T--", e.message)
-                                        }
-                                       
-
-                                    })
-
-                                    .catch(error => console.log("ERROR: accessibility.js"));
-
-                            })
-
-                            .catch(error => console.log("ERROR: export-data.js"));
-
-                    })
-
-                    .catch(error => console.log("ERROR: exporting.js"));
-
-            })
-
-            .catch(error => console.log("ERROR: highcharts.js"));
-
-    }
-
     resizeWindow(){
         console.log("Resize", window.innerWidth)
         var _self = this
@@ -459,8 +409,33 @@ export default class ChartLwr extends LightningElement {
 		}, 400);
     }
 
+
+    renderedCallback(){
+        loadScript(this, highchartsResource + "/highmaps.js")
+        .then(() => {
+               console.log("SUCCESS: highmaps.js");
+
+                    loadScript(this, highchartsResource + "/export-data.js")
+
+                        .then(() => {
+
+                            console.log("SUCCESS: export-data.js");
+
+                            this.runHighcharts();
+
+                        })
+
+                        .catch(error => console.log("ERROR: export-data.js"));
+
+                })
+
+        .catch(error => console.log("ERROR: highmaps.js"))
+    }
     connectedCallback(){
        window.addEventListener('resize', this.resizeWindow);
+       if (this.jsInitialized) {
+        return;
+    }
        this.handleSubscribe();
     }
 

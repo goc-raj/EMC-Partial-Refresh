@@ -5,6 +5,7 @@ import { loadScript } from "lightning/platformResourceLoader";
 export default class MapChartLWR extends LightningElement {
   mapPoint = mBurseCss + '/mburse/assets/map_point.png';
   @api locate;
+  @api layout;
   @api type;
   @api background;
   @api borderColor;
@@ -18,8 +19,8 @@ export default class MapChartLWR extends LightningElement {
   @api title;
 
 
-  get styleCss(){
-    return `height:${this.height}px`
+  @api reloadChart(){
+    this.locateMaps()
   }
 
   locateMaps() {
@@ -163,37 +164,33 @@ export default class MapChartLWR extends LightningElement {
     });
   }
 
-  connectedCallback() {
+  renderedCallback() {
     loadScript(this, highchartsResource + "/proj4.js")
       .then(() => {
         console.log("SUCCESS: proj4.js");
+      
+            loadScript(this, highchartsResource + "/accessibility.js")
+            .then(() => {
 
-        loadScript(this, highchartsResource + "/highmaps.js")
-          .then(() => {
-            console.log("SUCCESS: highmaps.js");
+              console.log("SUCCESS: accessibility.js");
+              loadScript(this, highchartsResource + "/us-all.js")
+                .then(() => {
 
-            loadScript(this, highchartsResource + "/us-all.js")
-              .then(() => {
-                console.log("SUCCESS: us-all.js");
+                  console.log("SUCCESS: us-all.js");
+                  loadScript(this, highchartsResource + "/ca-all.js")
+                    .then(() => {
+                      
+                      console.log("SUCCESS: ca-all.js");
+                      this.locateMaps()
+                    })
 
-                loadScript(this, highchartsResource + "/ca-all.js")
-                  .then(() => {
-                    console.log("SUCCESS: ca-all.js");
+                    .catch((error) => {console.log("ERROR: ca-all.js", error.message)});
+                })
 
-                    try {
-                      this.locateMaps();
-                    } catch (e) {
-                      console.log("T--", e.message);
-                    }
-                  })
-
-                  .catch((error) => console.log("ERROR: ca-all.js"));
-              })
-
-              .catch((error) => console.log("ERROR: us-all.js"));
-          })
-
-          .catch((error) => console.log("ERROR: highmaps.js"));
+                .catch((error) => console.log("ERROR: us-all.js"));
+            })
+            .catch((error) => console.log("ERROR: accessibility.js"));
+  
       })
 
       .catch((error) => console.log("ERROR: proj4.js"));

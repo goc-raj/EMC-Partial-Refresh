@@ -1,6 +1,40 @@
 import { LightningElement } from 'lwc';
+import videoLink from '@salesforce/apex/GetDriverData.getVideoLink';
 export default class DriverLWR extends LightningElement {
-    locationList;
+    contactId;
+    accountId;
+    isTeamShow;
+    role; 
+    customSetting;
+
+    getUrlParamValue(url, key) {
+        return new URL(url).searchParams.get(key);
+    }
+
+    constructor(){
+        super();
+        console.log("inside constructor")
+        videoLink()
+        .then((result)=>{
+            if(result){
+                this.customSetting = JSON.parse(result)
+            }
+            console.log("video list",result)
+
+        }).catch((err)=>{
+                console.log("Error--", err.message)
+        })
+    }
+
+    connectedCallback(){
+        document.title = "Driver Dashboard"
+        this.contactId = this.getUrlParamValue(location.href, "id");
+        this.accountId = this.getUrlParamValue(location.href, "accid");
+        this.isTeamShow = this.getUrlParamValue(location.href, "showteam");
+        this.role =  this.getUrlParamValue(location.href, "profile");
+    }
+
+    /*locationList;
 		locations;
     mileage = [{
         id: 'a0BNt00000AogTzMAJ',
@@ -169,5 +203,5 @@ export default class DriverLWR extends LightningElement {
                 .initMap(targetId);
             }
         }
-    }
+    }*/
 }
