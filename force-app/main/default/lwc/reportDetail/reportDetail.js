@@ -137,11 +137,10 @@ export default class ReportDetail extends LightningElement {
 
   get lastmonth() {
     var makeDate = new Date();
-    console.log("getdate", makeDate.getDate())
+    console.log("getdate", makeDate.getDate());
     if (makeDate.getDate() > 25) {
-      // makeDate.setMonth(makeDate.getMonth());
-      makeDate.setMonth(makeDate.getMonth() + 1);
-      let lastmonth = makeDate.toLocaleString('default', { month: 'long' });
+      let newDate = new Date(makeDate.getFullYear(), makeDate.getMonth() + 1, 1);
+      let lastmonth = newDate.toLocaleString('default', { month: 'long' });
       console.log('Current Month : ' + lastmonth);
       return lastmonth;
     } else {
@@ -279,8 +278,7 @@ export default class ReportDetail extends LightningElement {
                     apifieldstoheader.set(fields[j], this.cfHeaderlist[j]);
                 }
             }
-            // Set Id field & this.headerfields
-            apifieldstoheader.set('Id', 'Id');
+            // Set this.headerfields
             this.headerfields = apifieldstoheader;
             // Added by Raj
 
@@ -338,6 +336,11 @@ export default class ReportDetail extends LightningElement {
                         {
                             _self.consolidatejson(data[i][key],i, apifieldstoheader, datefields, datetimefields, datetotimefields, valueofkey, _self);
                         }
+                        // Set Id field
+                        else if (key == 'Id') {
+                          valueofkey.push('Id', data[i][key]);
+                        }
+                        // Added by Raj
                         else
                         {
                             if(apifieldstoheader.has(key))
@@ -1378,6 +1381,7 @@ export default class ReportDetail extends LightningElement {
     }
     // Convert the mergedObjects object back into an array
     const deduplicatedArray = Object.values(mergedObjects);
+    console.log('Duplicate Array : ' + JSON.stringify(deduplicatedArray));
 
 
     updateEditableField({ data: JSON.stringify(deduplicatedArray), idOfRecord: this.remId })

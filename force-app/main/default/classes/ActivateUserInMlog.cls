@@ -2,10 +2,9 @@ public with sharing class ActivateUserInMlog {
     
     @InvocableMethod(label='Activate User in Mlog ' description='Activating user in mlog when the user is activated in the salesforce  ' category='Contact')
     public Static Void ActivatingUser(List<String> ids) {
-        System.debug('ids: '+ids);
-        System.debug('Call Method from Flow');
-        for(String Id :  ids){
-            ActivatingUserinMlog(Id);
+            System.debug('Call Method from Flow');
+        for(String id :  ids){
+            ActivatingUserinMlog(id);
         }
     }
     @future(Callout = true)

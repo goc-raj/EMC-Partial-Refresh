@@ -1264,17 +1264,36 @@ public with sharing class ReportDetailsController
                 currentMonth -= 1 ;
             }
             monthLst.add(12);
-            monthLst.add(11);
+            if(System.today().day() > 25) {
+                monthLst.add(0,2);
+            }
+            else {
+                monthLst.add(11);
+            }
         } else if (yearVal < System.today().year() && currentMonth == 2){
             for(Integer i=currentMonth; i >= 1; i--){
                 monthLst.add(currentMonth);
                 currentMonth -= 1 ;
             }
-            monthLst.add(12);
+            if(System.today().day() > 25) {
+                monthLst.add(0,3);
+            }
+            else {
+                monthLst.add(12);
+            }
         }  else if (yearVal == System.today().year() && currentMonth > 2){
-            for(Integer i=currentMonth; i >= monthVal ; i--){
-                monthLst.add(currentMonth);
-                currentMonth -= 1 ;
+            if(System.today().day() > 25) {
+                monthLst.add(currentMonth + 1);
+                for(Integer i=currentMonth; i > monthVal ; i--){
+                    monthLst.add(currentMonth);
+                    currentMonth -= 1;
+                }
+            }
+            else {
+                for(Integer i=currentMonth; i >= monthVal ; i--){
+                    monthLst.add(currentMonth);
+                    currentMonth -= 1;
+                }
             }
         } else {
             for(Integer i=currentMonth; i >= 1 ; i--){

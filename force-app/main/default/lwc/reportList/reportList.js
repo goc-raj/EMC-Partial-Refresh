@@ -795,12 +795,12 @@ export default class ReportList extends NavigationMixin(LightningElement) {
         })
         .then((data) => {
           if (data) {
-            console.log("monthoption",data)
+            console.log("monthoption",JSON.stringify(data));
             this.monthoption = Object.entries(data).map(([label, value]) => ({ label, value }));
             // console.log("monthoption",this.monthoption)
 
             this.monthoption = JSON.parse(JSON.stringify( this.monthoption))
-            console.log("monthoption",this.monthoption)
+            console.log("monthoption",JSON.stringify(this.monthoption));
           }
         })
         .catch(error => {

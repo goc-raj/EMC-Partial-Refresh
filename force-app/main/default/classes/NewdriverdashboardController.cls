@@ -139,76 +139,67 @@ global class NewdriverdashboardController {
     }
     
     @RemoteAction
-    global static String getChartData(String contactid) { 
-        Map<Integer,String> monthNameMap = new Map<Integer, String>{01 =>'Jan', 02=>'Feb', 03=>'Mar', 04=>'Apr', 05=>'May',
-                                                                    06=>'Jun', 07=>'Jul', 08=>'Aug', 09=>'Sep',10=>'Oct',
-                                                                    11=>'Nov', 12=>'Dec'};
+    global static String getChartData(String contactid) {
+        Map<Integer,String> monthNameMap = new Map<Integer, String>{01 =>'Jan', 02=>'Feb', 03=>'Mar', 04=>'Apr', 05=>'May', 06=>'Jun', 07=>'Jul', 08=>'Aug', 09=>'Sep',10=>'Oct', 11=>'Nov', 12=>'Dec'};
         List<ReibursementWrapper> wrapList = new List<ReibursementWrapper>();
         List<Contact> conList = [SELECT id,Account.Start_Graph_Month__c,Activation_Date__c,Deactivated_Date__c FROM contact WHERE id =:contactid ];
         Integer startMonth;
-        /**this changes are made to provide only show that many month in chart that are being covered in in year or the driver worked till those month with company 
-         * author - khuman singh 
-         * date - 19/10/2023
-         * lines 153-158(next 6 lines )
-         */
         integer endMonth;
-        if(conList[0].Deactivated_Date__c != null && conList[0].Deactivated_Date__c.Year() == system.today().year()){
-            endMonth = conList[0].Deactivated_Date__c != null ? conList[0].Deactivated_Date__c.month() : system.today().month();
-        }else {
-            endMonth = System.today().month();
-        }
-        if(conList[0].Activation_Date__c != null && conList[0].Activation_Date__c.Year() == system.today().year()){
-            startMonth = conList[0].Activation_Date__c != null ? conList[0].Activation_Date__c.month() : 1;
-        } else {
-            startMonth = 1;
-        }
+        // if(conList[0].Deactivated_Date__c != null && conList[0].Deactivated_Date__c.Year() == system.today().year()){
+        //     endMonth = conList[0].Deactivated_Date__c != null ? conList[0].Deactivated_Date__c.month() : system.today().month();
+        // }else {
+        //     endMonth = System.today().month();
+        // }
+        // if(conList[0].Activation_Date__c != null && conList[0].Activation_Date__c.Year() == system.today().year()){
+        //     startMonth = conList[0].Activation_Date__c != null ? conList[0].Activation_Date__c.month() : 1;
+        // } else {
+        //     startMonth = 1;
+        // }
         String graphMonth;
         if(conList[0].Account.Start_Graph_Month__c != null){
-                        graphMonth = conList[0].Account.Start_Graph_Month__c;
+            graphMonth = conList[0].Account.Start_Graph_Month__c;
         }
         List<String> monthList = new List<String>();
         if(graphMonth != null && graphMonth == 'Jan'){
             for(integer i = 1;i <=12;i++){
-                        monthList.add( ( i < 10 ? '0' : '' ) + i + '-' + system.today().year());
+                monthList.add( ( i < 10 ? '0' : '' ) + i + '-' + system.today().year());
             }
         } else if(graphMonth != null && graphMonth == 'Dec'){
             Integer year = Date.today().year() - 1;
             monthList.add('12-'+year);
             for(integer i = 1;i <=11;i++){
-                        monthList.add( ( i < 10 ? '0' : '' ) + i + '-' + system.today().year());
+                monthList.add( ( i < 10 ? '0' : '' ) + i + '-' + system.today().year());
             }
         }
-        Map<Integer,Decimal> milMap = new Map<Integer,Decimal>();
-        Map<Integer,Decimal> reimMap = new Map<Integer,Decimal>();
-        for(Employee_Reimbursement__c reim : [SELECT Id,Month__c,
-                                                    Total_Approved_Pending_Mileage__c,
-                                                    Total_Monthly_Reimbursement__c 
-                                                FROM Employee_Reimbursement__c
-                                                WHERE Contact_Id__c =: contactid ]) {
-            String m = reim.Month__c;
-            List<String> monthLis = m.split('-');
-            milMap.put(Integer.valueOf(monthLis[0]), reim.Total_Approved_Pending_Mileage__c);
-            reimMap.put(Integer.valueOf(monthLis[0]), reim.Total_Monthly_Reimbursement__c);
+        Map<String,Decimal> milMap = new Map<String,Decimal>();
+        Map<String,Decimal> reimMap = new Map<String,Decimal>();
+        for(Employee_Reimbursement__c reim : [SELECT Id,Month__c, Total_Approved_Pending_Mileage__c, Total_Monthly_Reimbursement__c  FROM Employee_Reimbursement__c WHERE Contact_Id__c =: contactid ORDER BY CreatedDate DESC LIMIT 12 ]) {
+            // String m = reim.Month__c;
+            // List<String> monthLis = m.split('-');
+            milMap.put(reim.Month__c, reim.Total_Approved_Pending_Mileage__c);
+            reimMap.put(reim.Month__c, reim.Total_Monthly_Reimbursement__c);
         }
         Decimal sumMileage = 0;
         Decimal sumReim = 0;
         Map<Integer, Decimal> averageReimMap = new Map<Integer, Decimal>();
-        /**this changes are made to provide only show that many month in chart that are being covered in in year or the driver worked till those month with company 
-         * author - khuman singh
-         * date - 19/10/2023
-         * for loop condiion changed adding endmonth
-         */
-        for(Integer i = startMonth ; i <= endMonth; i++ ){
+        //for(Integer i = startMonth ; i <= endMonth; i++ ){
+        List<String> monthNum= new List<String>();
+        //defines number of month passed in current fiscal year of this chart
+        Integer noOfMonthPassed =1;
+        for(String i :monthList ){
             sumMileage += milMap.containskey(i) ? milMap.get(i) : 0;
             sumReim += reimMap.containskey(i) ? reimMap.get(i) : 0;
             ReibursementWrapper reimWrap = new ReibursementWrapper();
-            reimWrap.month = monthNameMap.get(i);
             reimWrap.mileage = milMap.get(i);
             reimWrap.reimbursement = reimMap.get(i);
-            reimWrap.averageMileage = ( sumMileage / i).setScale(2);
-            reimWrap.averagereimbursement = ( sumReim / i).setScale(2);
+            monthNum = i.split('-');
+            reimWrap.month = monthNameMap.get(Integer.valueOf(monthNum[0]));
+            reimWrap.averageMileage = milMap.containskey(i) ? ( sumMileage / noOfMonthPassed).setScale(2):0;
+            reimWrap.averagereimbursement = milMap.containskey(i) ? ( sumReim / noOfMonthPassed).setScale(2):0;
+            noOfMonthPassed++;
             wrapList.add(reimWrap);
         }
+        System.debug('output'+JSON.serialize(wrapList));
         return JSON.serialize(wrapList);
     }
 
