@@ -190,25 +190,10 @@ export default class DriverTaxLiabilityReport extends LightningElement {
             //To get the Detail for Annual Tax Detail
             let totalrem = this.JsonToStringifyData(this.DriverTaxDetail[5]);
             this.totalrem = this.JsonToParseData(totalrem);
-            // To adjust numbers with comma
-            if (parseFloat(this.totalrem) >= 1000) {
-                this.totalrem = parseFloat(this.totalrem).toLocaleString();
-            }
-            // Added by Raj
             let maxallounce = this.JsonToStringifyData(this.DriverTaxDetail[6]);
             this.maxallounce = this.JsonToParseData(maxallounce);
-            // To adjust numbers with comma
-            if (parseFloat(this.maxallounce) >= 1000) {
-                this.maxallounce =  parseFloat(this.maxallounce).toLocaleString();
-            }
-            // Added by Raj
             let taxliablity = this.JsonToStringifyData(this.DriverTaxDetail[7]);
             this.taxliablity = this.JsonToParseData(taxliablity);
-            // To adjust numbers with comma
-            if (parseFloat(this.taxliablity) >= 1000) {
-                this.taxliablity =  parseFloat(this.taxliablity).toLocaleString();
-            }
-            // Added by Raj
 
             //To get the detail for create Detail File
             let DownloadExcel = this.JsonToStringifyData(this.DriverTaxDetail[3]);

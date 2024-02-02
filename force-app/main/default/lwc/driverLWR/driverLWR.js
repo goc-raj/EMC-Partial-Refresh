@@ -1,40 +1,121 @@
-import { LightningElement } from 'lwc';
-import videoLink from '@salesforce/apex/GetDriverData.getVideoLink';
+import { LightningElement } from "lwc";
+import videoLink from "@salesforce/apex/GetDriverData.getVideoLink";
+import getDriverData from "@salesforce/apex/DriverProfileController.getDriverData";
+import getChartData from "@salesforce/apex/DriverProfileController.getChartData";
+
 export default class DriverLWR extends LightningElement {
-    contactId;
-    accountId;
-    isTeamShow;
-    role; 
-    customSetting;
+  contactId;
+  accountId;
+  isTeamShow;
+  role;
+  customSetting;
+  driverMeeting;
+  last2Year;
+  systemNotification;
+  chartInformation; 
+  activationDate;
 
-    getUrlParamValue(url, key) {
-        return new URL(url).searchParams.get(key);
-    }
+  getUrlParamValue(url, key) {
+    return new URL(url).searchParams.get(key);
+  }
 
-    constructor(){
-        super();
-        console.log("inside constructor")
-        videoLink()
-        .then((result)=>{
-            if(result){
-                this.customSetting = JSON.parse(result)
-            }
-            console.log("video list",result)
+  constructor() {
+    super();
+    console.log("inside constructor");
+    videoLink()
+      .then((result) => {
+        if (result) {
+          this.customSetting = JSON.parse(result);
+        }
+        console.log("video list", result);
+      })
+      .catch((err) => {
+        console.log("Error--", err.message);
+      });
+  }
 
-        }).catch((err)=>{
-                console.log("Error--", err.message)
-        })
-    }
+  escapeSpecialChars(str) {
+    return str
+      .replace(/\\'/g, "'")
+      .replace(/\\&#39;/g, "'")
+      .replace(/(&quot\;)/g, '"');
+  }
 
-    connectedCallback(){
-        document.title = "Driver Dashboard"
-        this.contactId = this.getUrlParamValue(location.href, "id");
-        this.accountId = this.getUrlParamValue(location.href, "accid");
-        this.isTeamShow = this.getUrlParamValue(location.href, "showteam");
-        this.role =  this.getUrlParamValue(location.href, "profile");
-    }
+  chartFormat(chartDetail) {
+    var chartlabels = [], chartDataValue = [
+        {
+          Mileagechart: {},
+          Reimbursementchart: {},
+        },
+      ],
+      mileage = [],
+      reimbursement = [],
+      averageReimbursement = [],
+      averageMileage = [],
+      reimb,
+      mil,
+      avgReimb,
+      avgMileage,
+      midMonth = [];
+    chartDetail.forEach((ch) => {
+      if (ch.month != null && ch.month != undefined) {
+        midMonth.push(ch.month);
+        chartlabels.push(ch.month.charAt(0));
+        reimb = ch.reimbursement == null ? 0 : ch.reimbursement;
+        mil = ch.mileage == null ? 0 : ch.mileage;
+        avgReimb =
+          ch.averagereimbursement == null ? 0 : ch.averagereimbursement;
+        avgMileage = ch.averageMileage == null ? 0 : ch.averageMileage;
+        averageReimbursement.push(avgReimb);
+        averageMileage.push(avgMileage);
+        reimbursement.push(reimb);
+        mileage.push(mil);
+      }
+    });
+    chartDataValue[0].Mileagechart.chartLabel = chartlabels;
+    chartDataValue[0].monthName = midMonth;
+    chartDataValue[0].Mileagechart.labelA = "Monthly";
+    chartDataValue[0].Mileagechart.dataA = mileage;
+    chartDataValue[0].Mileagechart.labelB = "Average";
+    chartDataValue[0].Mileagechart.dataB = averageMileage;
+    chartDataValue[0].Reimbursementchart.chartLabel = chartlabels;
+    chartDataValue[0].Reimbursementchart.labelA = "Monthly";
+    chartDataValue[0].Reimbursementchart.dataA = reimbursement;
+    chartDataValue[0].Reimbursementchart.labelB = "Average";
+    chartDataValue[0].Reimbursementchart.dataB = averageReimbursement;
+    return chartDataValue
+  }
 
-    /*locationList;
+  connectedCallback() {
+    document.title = "Driver Dashboard";
+    this.contactId = this.getUrlParamValue(location.href, "id");
+    this.accountId = this.getUrlParamValue(location.href, "accid");
+    this.isTeamShow = this.getUrlParamValue(location.href, "showteam");
+    this.role = this.getUrlParamValue(location.href, "profile");
+    getDriverData({ contactId: this.contactId }).then((d) => {
+      console.log("Data----", d);
+      if(d){
+        let contact = JSON.parse(d);
+        this.driverMeeting = contact[0]?.meeting;
+        this.last2Year = contact[0]?.last2Year;
+        this.activationDate = contact[0]?.activationDate;
+        this.systemNotification = contact[0]?.systemNotification;
+        this.activationDate = contact[0]?.activationDate;
+            getChartData({ contactId: this.contactId }).then((result) => {
+                console.log("chart----", result);
+                let escapeResult = this.escapeSpecialChars(result);
+                let chartDetail = JSON.parse(escapeResult);
+                // sortByMonth(chartDetail);
+                if (chartDetail != null && chartDetail != undefined) {
+                  this.chartInformation = this.chartFormat(chartDetail);
+                }
+            });
+      }
+      
+    });
+  }
+
+  /*locationList;
 		locations;
     mileage = [{
         id: 'a0BNt00000AogTzMAJ',

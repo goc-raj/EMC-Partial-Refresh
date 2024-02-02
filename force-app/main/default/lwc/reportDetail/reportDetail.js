@@ -201,17 +201,17 @@ export default class ReportDetail extends LightningElement {
         this.detailsoql = fields;
         // Added by Raj
         if(fields){
-            if (report.Report_Header__c != undefined) {
-                if (report.Report_Header__c.includes(',')) {
-                    this.cfHeaderlist = report.Report_Header__c.split(',');
-                }
-                else {
-                    this.cfHeaderlist.push(report.Report_Header__c);
-                }
-            }
-            // Set this.headerdata
-            this.headerdata = JSON.parse(JSON.stringify(this.cfHeaderlist));
-            // Added by Raj
+            // if (report.Report_Header__c != undefined) {
+            //     if (report.Report_Header__c.includes(',')) {
+            //         this.cfHeaderlist = report.Report_Header__c.split(',');
+            //     }
+            //     else {
+            //         this.cfHeaderlist.push(report.Report_Header__c);
+            //     }
+            // }
+            // // Set this.headerdata
+            // this.headerdata = JSON.parse(JSON.stringify(this.cfHeaderlist));
+            // // Added by Raj
 
             if (report.Boolean_Field__c != undefined) {
               if (report.Boolean_Field__c.includes(',')) {
@@ -222,14 +222,14 @@ export default class ReportDetail extends LightningElement {
               }
             }
 
-            if (report.Numeric_Fields__c != undefined) {
-              if (report.Numeric_Fields__c.includes(',')) {
-                  this.cfHeaderfields = report.Numeric_Fields__c.split(',');
-              }
-              else {
-                  this.cfHeaderfields.push(report.Numeric_Fields__c.trim());
-              }
-            }
+            // if (report.Numeric_Fields__c != undefined) {
+            //   if (report.Numeric_Fields__c.includes(',')) {
+            //       this.cfHeaderfields = report.Numeric_Fields__c.split(',');
+            //   }
+            //   else {
+            //       this.cfHeaderfields.push(report.Numeric_Fields__c.trim());
+            //   }
+            // }
 
             if (report.Two_Decimal_Places__c != undefined) {
               if (report.Two_Decimal_Places__c.includes(',')) {
@@ -240,23 +240,23 @@ export default class ReportDetail extends LightningElement {
               }
             }
 
-            if (report.Date_Time_Fields__c != undefined) {
-              if (report.Date_Time_Fields__c.includes(',')) {
-                  this.cfReportdatetimefields = report.Date_Time_Fields__c.split(',');
-              }
-              else {
-                  this.cfReportdatetimefields.push(report.Date_Time_Fields__c.trim());
-              }
-            }
+            // if (report.Date_Time_Fields__c != undefined) {
+            //   if (report.Date_Time_Fields__c.includes(',')) {
+            //       this.cfReportdatetimefields = report.Date_Time_Fields__c.split(',');
+            //   }
+            //   else {
+            //       this.cfReportdatetimefields.push(report.Date_Time_Fields__c.trim());
+            //   }
+            // }
 
-            if (report.Date_Fields__c != undefined) {
-              if (report.Date_Fields__c.includes(',')) {
-                  this.cfReportdatefields = report.Date_Fields__c.split(',');
-              }
-              else {
-                  this.cfReportdatefields.push(report.Date_Fields__c.trim());
-              }
-            }
+            // if (report.Date_Fields__c != undefined) {
+            //   if (report.Date_Fields__c.includes(',')) {
+            //       this.cfReportdatefields = report.Date_Fields__c.split(',');
+            //   }
+            //   else {
+            //       this.cfReportdatefields.push(report.Date_Fields__c.trim());
+            //   }
+            // }
 
             if (report.Date_Time_To_Time__c != undefined) {
               if (report.Date_Time_To_Time__c.includes(',')) {
@@ -1640,6 +1640,75 @@ export default class ReportDetail extends LightningElement {
               this.originalData = JSON.parse(JSON.parse(data[0]));
             }
             console.log('detailData : ' + JSON.stringify(this.detaildata));
+
+            // Take commonFilter Code for early usage basis
+            let sql = this.reportData.Report_Soql__c.split('from');
+            let fields = sql[0].split('select')[1].trim().split(',');
+            this.detail = fields;
+            if (this.reportData.Report_Header__c != undefined) {
+              if (this.reportData.Report_Header__c.includes(',')) {
+                  this.cfHeaderlist = this.reportData.Report_Header__c.split(',');
+              }
+              else {
+                  this.cfHeaderlist.push(this.reportData.Report_Header__c);
+              }
+            }
+            // Set this.headerdata
+            this.headerdata = JSON.parse(JSON.stringify(this.cfHeaderlist));
+            // Added by Raj
+            if (this.reportData.Numeric_Fields__c != undefined) {
+              if (this.reportData.Numeric_Fields__c.includes(',')) {
+                this.cfHeaderfields = this.reportData.Numeric_Fields__c.split(',');
+              }
+              else {
+                this.cfHeaderfields.push(this.reportData.Numeric_Fields__c.trim());
+              }
+            }
+            if (this.reportData.Date_Time_Fields__c != undefined) {
+              if (this.reportData.Date_Time_Fields__c.includes(',')) {
+                this.cfReportdatetimefields = this.reportData.Date_Time_Fields__c.split(',');
+              }
+              else {
+                this.cfReportdatetimefields.push(this.reportData.Date_Time_Fields__c.trim());
+              }
+            }
+            if (this.reportData.Date_Fields__c != undefined) {
+              if (this.reportData.Date_Fields__c.includes(',')) {
+                this.cfReportdatefields = this.reportData.Date_Fields__c.split(',');
+              }
+              else {
+                this.cfReportdatefields.push(this.reportData.Date_Fields__c.trim());
+              }
+            }
+            // Set this.header, columnType, columnName and sortOder
+            var headingData = [];
+            for(let i = 0; i < this.cfHeaderlist.length; i++) {
+              let colType = 'String';
+              if(this.cfHeaderfields.includes(this.detail[i])) {
+                colType = 'Integer';
+              } else if (this.cfReportdatefields.includes(this.detail[i]) || this.cfReportdatetimefields.includes(this.detail[i])) {
+                colType = 'Date';
+              }
+              if(i == 0) {
+                if(this.headerdata.includes('Activation Date')) {
+                  this.columnName = "Activation Date";
+                  this.columnType = 'Date';
+                  this.sortOrder = 'asc';
+                } else {
+                  this.columnName = this.headerdata[i];
+                  this.columnType = colType;
+                  this.sortOrder = 'desc';
+                }
+                headingData.push({ id: i, name: this.cfHeaderlist[i], colName: this.cfHeaderlist[i], colType: colType, arrUp: true, arrDown: false });
+              } else {
+                headingData.push({ id: i, name: this.cfHeaderlist[i], colName: this.cfHeaderlist[i], colType: colType, arrUp: false, arrDown: false });
+              }
+            }
+            this.header = JSON.parse(JSON.stringify(headingData));
+            console.log("this.header", this.header);
+            // Added by Raj
+            // Added by Raj
+
             if (this.detaildata.length > 0) {
               this.showbuttons = true;
               if (this.reportId == TripDetailReportSightScience) {
@@ -1657,34 +1726,6 @@ export default class ReportDetail extends LightningElement {
                    console.log("Error formatting", e.message)
                  }
               }
-
-              // Set this.header, columnType, columnName and sortOder
-              var headingData = [];
-              for(let i = 0; i < this.cfHeaderlist.length; i++) {
-                let colType = 'String';
-                if(this.cfHeaderfields.includes(this.detail[i])) {
-                  colType = 'Integer';
-                } else if (this.cfReportdatefields.includes(this.detail[i]) || this.cfReportdatetimefields.includes(this.detail[i])) {
-                  colType = 'Date';
-                }
-                if(i == 0) {
-                  if(this.headerdata.includes('Activation Date')) {
-                    this.columnName = "Activation Date";
-                    this.columnType = 'Date';
-                    this.sortOrder = 'asc';
-                  } else {
-                    this.columnName = this.headerdata[i];
-                    this.columnType = colType;
-                    this.sortOrder = 'desc';
-                  }
-                  headingData.push({ id: i, name: this.cfHeaderlist[i], colName: this.cfHeaderlist[i], colType: colType, arrUp: true, arrDown: false });
-                } else {
-                  headingData.push({ id: i, name: this.cfHeaderlist[i], colName: this.cfHeaderlist[i], colType: colType, arrUp: false, arrDown: false });
-                }
-              }
-              this.header = JSON.parse(JSON.stringify(headingData));
-              console.log("this.header", this.header);
-              // Added by Raj
 
               this.finaldata = JSON.parse(JSON.stringify(formatted));
               console.log("final data : ", JSON.stringify(this.finaldata));

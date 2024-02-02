@@ -12,7 +12,8 @@
         <c-dashboard-map map-data={locationList} map-location={locations}></c-dashboard-map>
     </template>
     <c-web-chat></c-web-chat> -->
-    <template lwc:if={role}>
-        <c-driver-profile-l-w-r contact-id={contactId} account-id={accountId} show-team={isTeamShow} profile={currentUserProfileId} user-role={role} custom-setting={customSetting}></c-driver-profile-l-w-r>
+    <template lwc:if={chartInformation}>
+        <c-driver-profile-l-w-r contact-id={contactId} account-id={accountId} show-team={isTeamShow} profile={currentUserProfileId} user-role={role} custom-setting={customSetting}
+        driver-meeting={driverMeeting} last2-year={last2Year} activation-date={activationDate} system-notification={systemNotification} chart-data={chartInformation} ></c-driver-profile-l-w-r>
     </template>
 </template>

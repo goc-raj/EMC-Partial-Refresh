@@ -1,8 +1,8 @@
 global class DriverProfileController {
     @AuraEnabled
-    public static String getDriverData() {
+    public static String getDriverData(String contactId) {
             List<contactValueWrapper> driverData = new List<contactValueWrapper>(); 
-            List<Contact> conList = [SELECT id,FirstName,Role__c,Driving_States__c,account.Schedule_Goto_Meeting__c,Activation_Date__c, System_Notification__c FROM Contact WHERE id =: userinfo.getuserid() ];
+            List<Contact> conList = [SELECT id,FirstName,Role__c,Driving_States__c,account.Schedule_Goto_Meeting__c,Activation_Date__c, System_Notification__c FROM Contact WHERE id =: contactId ];
             contactValueWrapper contactWrap = new contactValueWrapper ();
             if(conList.size() > 0){
                 contactWrap.ScheduleGotoMeeting = conList[0].account.Schedule_Goto_Meeting__c != null ? conList[0].account.Schedule_Goto_Meeting__c : '' ;
@@ -10,9 +10,14 @@ global class DriverProfileController {
                 contactWrap.systemNotification = conList[0].System_Notification__c;            
             }  
             
-            contactWrap.last2Month = String.escapeSingleQuotes(WrapperUtils.getpastYearReimbursement(userinfo.getuserid())); 
+            contactWrap.last2Month = String.escapeSingleQuotes(WrapperUtils.getpastYearReimbursement(contactId)); 
             driverData.add(contactWrap);
             return JSON.serialize(driverData).unescapeHtml4();
+    }
+
+    @AuraEnabled
+    public static String getChartData(String contactId) { 
+        return NewdriverdashboardController.getChartData(contactid);
     }
 
     global class contactValueWrapper {

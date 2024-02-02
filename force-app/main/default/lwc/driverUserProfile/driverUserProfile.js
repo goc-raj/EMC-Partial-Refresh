@@ -572,10 +572,11 @@ export default class DriverUserProfile extends LightningElement {
         this.biweekYtd = false;
         getMileages({
             clickedMonth: this.lastMonth,
-            year: (this.lastMonth === 'December') ? this.year - 1 : this.year,
+            year: (this.lastMonth === 'December') ? (this.year - 1).toString() : (this.year).toString(),
             contactId: this.contactId
         })
         .then(data => {
+            console.log("get--", data)
             let resultData = data[0].replace(/\\/g, '');
             this.headerText = 'Last month';
             this.monthText =  '(' + this.lastMonth + ')';
@@ -591,9 +592,9 @@ export default class DriverUserProfile extends LightningElement {
             this.template.querySelector('c-user-profile-modal').show();
         })
         .catch(error => {
-            console.log({
-                error
-            });
+            console.log(
+                error.message
+            );
         });
     }
 
@@ -608,7 +609,7 @@ export default class DriverUserProfile extends LightningElement {
         this.variable = false;
         getMileages({
             clickedMonth: this.thisMonth,
-            year: this.year,
+            year: (this.year).toString(),
             contactId: this.contactId
         })
         .then(data => {
@@ -668,7 +669,7 @@ export default class DriverUserProfile extends LightningElement {
         this.isSortable = false;
         this.modalStyle = 'slds-modal slds-modal_large slds-is-fixed slds-fade-in-open animate__animated animate__fadeInTopLeft animate__faster';
         getAllReimbursements({
-            year: this.year,
+            year: (this.year).toString(),
             contactId : this.contactId,
             accountId : this.accountId
         })
@@ -697,7 +698,7 @@ export default class DriverUserProfile extends LightningElement {
         this.isSortable = false;
         this.modalStyle = 'slds-modal slds-modal_large slds-is-fixed slds-fade-in-open animate__animated animate__fadeInTopLeft animate__faster';
         getAllReimbursements({
-            year: this.year,
+            year: (this.year).toString(),
             contactId : this.contactId,
             accountId : this.accountId
         })
@@ -895,11 +896,11 @@ export default class DriverUserProfile extends LightningElement {
         let currDate = new Date();
         let monthNo = currDate.getMonth();
         let previousMonthNo = currDate.getMonth() - 1;
-        this.year = currDate.getFullYear();
         this.thisMonth = this.getMonthName(monthNo);
         this.lastMonth = (previousMonthNo > 0) ? this.getMonthName(previousMonthNo) : this.getMonthName(11);
+        this.year = currDate.getFullYear();
         this.messageForNextBatch = (this.currentMonth()) ? 'Updated ' + this.currentMonth() + '. 4' : false;
-       // console.log(this.thisMonth, this.lastMonth)
+        console.log(this.thisMonth, this.lastMonth, this.year, this.contactId)
         if(this.chartInfo){
           //  console.log("chart",this.chartInfo[0])
             this.chartList = this.chartInfo[0]

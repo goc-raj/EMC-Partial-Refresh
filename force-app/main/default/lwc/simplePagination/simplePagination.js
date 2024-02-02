@@ -50,10 +50,10 @@ import { LightningElement, api ,track} from 'lwc';
             this.updateRecords(this.records,this.pageSize);
         }
     
-        onPrev(){ 
-            if(this.currentPage>1){
+        onPrev(){
+            if(this.currentPage > 1){
                 //this.hasNext = true;
-                this.currentPage = this.currentPage-1
+                this.currentPage = this.currentPage - 1;
                 this.updateRecords(this.totalRecords , this.recordSize)
                 if (this.paginate.length > this.shortPaginate) {
                     if (this.currentPage < this.paginate.length) {
@@ -64,14 +64,18 @@ import { LightningElement, api ,track} from 'lwc';
                         }
                     }
                 }
-            }else if(this.currentPage == 1){
-                // this.hasPrev = false;
-                // this.hasNext = true;
             }
         }
         onPageClick(event){
             this.currentPage = parseInt(event.target.dataset.id, 10);
-           
+            // if(this.currentPage > 1) {
+            //     this.hasPrev = false;
+            //     this.template.querySelector('.prevButton').classList.remove('disabled');
+            // } else {
+            //     this.hasPrev = true;
+            //     this.template.querySelector('.prevButton').classList.add('disabled');
+            // }
+
             this.updateRecords(this.totalRecords , this.recordSize)
             if (this.paginate.length > this.shortPaginate) {
                 this.next;
@@ -103,7 +107,6 @@ import { LightningElement, api ,track} from 'lwc';
                         }
                     }
                 }
-                
         }
         @api updateRecords(data , recordperPage){ 
             this.paginate = [];

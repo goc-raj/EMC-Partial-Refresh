@@ -648,7 +648,7 @@ export default class DriverProfileLWR extends LightningElement {
         this.notificationModal = false;
         this.notificationViewClicked = false;
         // eslint-disable-next-line no-restricted-globals
-        window.location.href = location.origin + location.pathname + location.search + '#Insurance-Upload';
+        location.href = location.origin + location.pathname + location.search + '#Insurance-Upload';
         this.template.querySelector('c-navigation-menu').toggleStyle('Insurance-Upload');
     }
 
@@ -665,7 +665,7 @@ export default class DriverProfileLWR extends LightningElement {
         this.notificationViewClicked = false;
         this.resources = true;
         // eslint-disable-next-line no-restricted-globals
-        window.location.href = location.origin + location.pathname + location.search + '#Videos';
+        location.href = location.origin + location.pathname + location.search + '#Videos';
         this.template.querySelector('c-navigation-menu').toggleStyle('Videos');
     }
 
@@ -675,7 +675,7 @@ export default class DriverProfileLWR extends LightningElement {
         this.manualEntryView = false;
         this.myProfile = false;
         // eslint-disable-next-line no-restricted-globals
-        window.location.href = location.origin + location.pathname + location.search + '#Mileage';
+        location.href = location.origin + location.pathname + location.search + '#Mileage';
         this.template.querySelector('c-navigation-menu').toggleStyle('Mileage');
         this.template.querySelector('c-dashboard-profile-header').setSource(this.isHomePage);
     }
@@ -693,7 +693,7 @@ export default class DriverProfileLWR extends LightningElement {
         this.notificationViewClicked = false;
         this.resources = true;
         // eslint-disable-next-line no-restricted-globals
-        window.location.href = location.origin + location.pathname + location.search + '#Videos';
+        location.href = location.origin + location.pathname + location.search + '#Videos';
         this.template.querySelector('c-navigation-menu').toggleStyle('Videos');
         this.template.querySelector('c-dashboard-profile-header').setSource(this.isHomePage);
     }
@@ -724,7 +724,7 @@ export default class DriverProfileLWR extends LightningElement {
             })
         );
         // eslint-disable-next-line no-restricted-globals
-        window.location.href = location.origin + location.pathname + location.search + '#Archive';
+        location.href = location.origin + location.pathname + location.search + '#Archive';
         this.template.querySelector('c-navigation-menu').toggleStyle('Archive');
     }
 
@@ -763,7 +763,7 @@ export default class DriverProfileLWR extends LightningElement {
         this.liabilityView = false;
         this.complianceView = true;
         // eslint-disable-next-line no-restricted-globals
-        window.location.href = location.origin + location.pathname + location.search + '#Compliance';
+        location.href = location.origin + location.pathname + location.search + '#Compliance';
         this.template.querySelector('c-navigation-menu').toggleStyle('Compliance');
     }
 
@@ -771,7 +771,7 @@ export default class DriverProfileLWR extends LightningElement {
         this.liabilityView = true;
         this.complianceView = false;
         // eslint-disable-next-line no-restricted-globals
-        window.location.href = location.origin + location.pathname + location.search + '#Tax-Liability';
+        location.href = location.origin + location.pathname + location.search + '#Tax-Liability';
         this.template.querySelector('c-navigation-menu').toggleStyle('Tax-Liability');
     }
 
@@ -785,7 +785,7 @@ export default class DriverProfileLWR extends LightningElement {
         this.manualEntryView = false;
         this.reimbursementArchive = false;
         // eslint-disable-next-line no-restricted-globals
-        window.location.href = location.origin + location.pathname + location.search + '#Mileage';
+        location.href = location.origin + location.pathname + location.search + '#Mileage';
         this.template.querySelector('c-navigation-menu').toggleStyle('Mileage');
     }
 
@@ -866,7 +866,7 @@ export default class DriverProfileLWR extends LightningElement {
         var splitText, splitName;
         window.history.back();
         setTimeout(()=>{
-            const url = new URL(document.location);
+            const url = new URL(location);
             let address = url.hash;
             // console.log("window.history", address);
             if(address === undefined || address === '')
@@ -955,7 +955,7 @@ export default class DriverProfileLWR extends LightningElement {
         this.tripView = false;
         const url = new URL(location);
         let params = new URL(location).searchParams;
-        let address = params.hash;
+        let address = url.hash;
         if (address === '#Archive') {
             document.title = 'Archive'
             this.myProfile = false;
@@ -1258,7 +1258,7 @@ export default class DriverProfileLWR extends LightningElement {
 
     closeNotification(){
         let divElement = this.template.querySelector('.vue-sidebar');
-        const url = new URL(document.location);
+        const url = new URL(location);
         let address = url.hash;
       
         if (divElement) {

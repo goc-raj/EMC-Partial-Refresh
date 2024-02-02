@@ -3,11 +3,10 @@
        <ul class="slds-button-group-row">
          <template lwc:if={hasPrev}>
             <li class="slds-button-group-item nevigate-icon-left">
-               <a onclick={onPrev}><i class="fa-solid fa-angle-left fa-lg next_button"></i></a>
+               <a onclick={onPrev} class="prevButton"><i class="fa-solid fa-angle-left fa-lg next_button"></i></a>
             </li>
          </template>
-        
-        
+
          <template lwc:if={totalpagebutton}>
             <template for:each={totalPagenew} for:item="pageNumber">
                <li class="slds-button-group-item page_number" key={pageNumber}> 

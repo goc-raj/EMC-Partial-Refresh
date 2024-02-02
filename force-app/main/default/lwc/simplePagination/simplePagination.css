@@ -10,11 +10,15 @@
     padding: 5px 0 0 0 !important;
     text-align: center;
 }
-.disable{
+.disabled{
     pointer-events: none;
     cursor: none;
 }
-.slds_link:hover,
+/* .disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+} */
+x.slds_link:hover,
 .slds_link:focus {
     text-decoration: none !important;
     outline: 0;
@@ -43,11 +47,10 @@
     /* height: 40px; */
     color: #7ABB4A !important;
 } 
-.nevigate-icon-left{
+/* .nevigate-icon-left{
     position: absolute;
     margin-left: -41px !important;
-    /* left: 426px; */
-}
+} */
 .fa,
 .fas,
 .fa-solid,
