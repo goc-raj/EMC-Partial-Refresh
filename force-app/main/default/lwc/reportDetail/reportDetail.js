@@ -370,6 +370,16 @@ export default class ReportDetail extends LightningElement {
                                     let twodecimalValues = data[i][key].toFixed(2);
                                     valueofkey.push(apifieldstoheader.get(key),twodecimalValues);
                                 }
+                                else if(numericheadertoapifields.has(key))
+                                {
+                                    let numericValues;
+                                    if(data[i][key] % 1 !== 0) {
+                                      numericValues = data[i][key].toFixed(2);
+                                    } else {
+                                      numericValues = data[i][key];
+                                    }
+                                    valueofkey.push(apifieldstoheader.get(key),numericValues);
+                                }
                                 else
                                 {
                                     valueofkey.push(apifieldstoheader.get(key),data[i][key]);
@@ -1314,6 +1324,7 @@ export default class ReportDetail extends LightningElement {
     this.updatebtn = true;
     this.stringifydata = event.detail.list;
     let updData = JSON.parse(event.detail.list);
+    console.log("Befoer Update updData", JSON.stringify(updData));
     this.remId = event.detail.id;
     updData.forEach(row => {
       if (this.remId == row.Id) {
@@ -1322,9 +1333,9 @@ export default class ReportDetail extends LightningElement {
           let key = index.split('-')[0];
           if (row.hasOwnProperty(key)) {
             const value1 = parseFloat(row[key]) || 0; // Convert to float, default to 0 if not a valid number
-            const value2 = parseFloat(row['Variable Amount']) || 0;
+            const value2 = parseFloat(row['Monthly Variable Amount']) || 0;
             this.totalsum = value1 + value2;
-            row['Total Reimbursement'] = this.totalsum.toLocaleString();
+            row['Total Monthly Reimbursement'] = this.totalsum.toLocaleString();
 						this.keyName = key;
             this.keyValue = row[key];
             let finalJson = [];
@@ -1334,7 +1345,7 @@ export default class ReportDetail extends LightningElement {
         })
       }
     })
-    console.log("updData", JSON.stringify(updData))
+    console.log("After Update updData", JSON.stringify(updData));
     if (this.searchdata.length > 0) {
       this.searchdata = updData;
       if (this.isSearch == true) {
@@ -1342,7 +1353,7 @@ export default class ReportDetail extends LightningElement {
           if (this.remId == row.Id) {
             if (row.hasOwnProperty(this.keyName)) {
               row[this.keyName] = this.formatNumberWithCommas(this.keyValue);
-              row['Total Reimbursement'] = this.totalsum.toLocaleString();
+              row['Total Monthly Reimbursement'] = this.totalsum.toLocaleString();
             }
           }
         })
@@ -1354,9 +1365,8 @@ export default class ReportDetail extends LightningElement {
         this.finaldataSearch.forEach(row => {
           if (this.remId == row.Id) {
             if (row.hasOwnProperty(this.keyName)) {
-              console.log('Key Name : ' + this.keyName);
               row[this.keyName] = this.formatNumberWithCommas(this.keyValue);
-              row['Total Reimbursement'] = this.totalsum.toLocaleString();
+              row['Total Monthly Reimbursement'] = this.totalsum.toLocaleString();
             }
           }
         })
@@ -1405,7 +1415,7 @@ export default class ReportDetail extends LightningElement {
             /* Fixed decimal issue in Fixed Amount field */
             for (let record of this.filterdataSearch) {
               for (let keyField of record.keyFields) {
-                if (keyField.key === "Fixed" && keyField.value !== null && keyField.value.endsWith(".")) {
+                if (keyField.key === "Monthly Fixed Amount" && keyField.value !== null && keyField.value.endsWith(".")) {
                   keyField.value = keyField.value.slice(0, -1);
                 }
               }
@@ -1420,7 +1430,7 @@ export default class ReportDetail extends LightningElement {
             /* Fixed decimal issue in Fixed Amount field */
             for (let record of this.finaldataSearch) {
               for (let keyField of record.keyFields) {
-                if (keyField.key === "Fixed" && keyField.value !== null && keyField.value.endsWith(".")) {
+                if (keyField.key === "Monthly Fixed Amount" && keyField.value !== null && keyField.value.endsWith(".")) {
                   keyField.value = keyField.value.slice(0, -1);
                 }
               }
@@ -1440,7 +1450,7 @@ export default class ReportDetail extends LightningElement {
             /* Fixed decimal issue in Fixed Amount field */
             for (let record of this.searchdata) {
               for (let keyField of record.keyFields) {
-                if (keyField.key === "Fixed" && keyField.value !== null && keyField.value.endsWith(".")) {
+                if (keyField.key === "Monthly Fixed Amount" && keyField.value !== null && keyField.value.endsWith(".")) {
                   keyField.value = keyField.value.slice(0, -1);
                 }
               }
@@ -1454,7 +1464,7 @@ export default class ReportDetail extends LightningElement {
             /* Fixed decimal issue in Fixed Amount field */
             for (let record of this.finaldata) {
               for (let keyField of record.keyFields) {
-                if (keyField.key === "Fixed" && keyField.value !== null && keyField.value.endsWith(".")) {
+                if (keyField.key === "Monthly Fixed Amount" && keyField.value !== null && keyField.value.endsWith(".")) {
                   keyField.value = keyField.value.slice(0, -1);
                 }
               }
@@ -1610,6 +1620,75 @@ export default class ReportDetail extends LightningElement {
           this.DriverManager = 'Driver';
         }
         this.placeholder = 'Select ' + this.DriverManager;
+
+        // Take commonFilter Code for early usage basis
+        let sql = this.reportData.Report_Soql__c.split('from');
+        let fields = sql[0].split('select')[1].trim().split(',');
+        this.detail = fields;
+        if (this.reportData.Report_Header__c != undefined) {
+          if (this.reportData.Report_Header__c.includes(',')) {
+              this.cfHeaderlist = this.reportData.Report_Header__c.split(',');
+          }
+          else {
+              this.cfHeaderlist.push(this.reportData.Report_Header__c);
+          }
+        }
+        // Set this.headerdata
+        this.headerdata = JSON.parse(JSON.stringify(this.cfHeaderlist));
+        // Added by Raj
+        if (this.reportData.Numeric_Fields__c != undefined) {
+          if (this.reportData.Numeric_Fields__c.includes(',')) {
+            this.cfHeaderfields = this.reportData.Numeric_Fields__c.split(',');
+          }
+          else {
+            this.cfHeaderfields.push(this.reportData.Numeric_Fields__c.trim());
+          }
+        }
+        if (this.reportData.Date_Time_Fields__c != undefined) {
+          if (this.reportData.Date_Time_Fields__c.includes(',')) {
+            this.cfReportdatetimefields = this.reportData.Date_Time_Fields__c.split(',');
+          }
+          else {
+            this.cfReportdatetimefields.push(this.reportData.Date_Time_Fields__c.trim());
+          }
+        }
+        if (this.reportData.Date_Fields__c != undefined) {
+          if (this.reportData.Date_Fields__c.includes(',')) {
+            this.cfReportdatefields = this.reportData.Date_Fields__c.split(',');
+          }
+          else {
+            this.cfReportdatefields.push(this.reportData.Date_Fields__c.trim());
+          }
+        }
+        // Set this.header, columnType, columnName and sortOder
+        var headingData = [];
+        for(let i = 0; i < this.cfHeaderlist.length; i++) {
+          let colType = 'String';
+          if(this.cfHeaderfields.includes(this.detail[i])) {
+            colType = 'Integer';
+          } else if (this.cfReportdatefields.includes(this.detail[i]) || this.cfReportdatetimefields.includes(this.detail[i])) {
+            colType = 'Date';
+          }
+          if(i == 0) {
+            if(this.headerdata.includes('Activation Date')) {
+              this.columnName = "Activation Date";
+              this.columnType = 'Date';
+              this.sortOrder = 'asc';
+            } else {
+              this.columnName = this.headerdata[i];
+              this.columnType = colType;
+              this.sortOrder = 'desc';
+            }
+            headingData.push({ id: i, name: this.cfHeaderlist[i], colName: this.cfHeaderlist[i], colType: colType, arrUp: true, arrDown: false });
+          } else {
+            headingData.push({ id: i, name: this.cfHeaderlist[i], colName: this.cfHeaderlist[i], colType: colType, arrUp: false, arrDown: false });
+          }
+        }
+        this.header = JSON.parse(JSON.stringify(headingData));
+        console.log("this.header", this.header);
+        // Added by Raj
+        // Added by Raj
+
         getManagerDriverDetails({ accountId: this._accid, role: this.DriverManager })
           .then(result => {
             this.DriverManagerList = JSON.parse(result);
@@ -1640,74 +1719,6 @@ export default class ReportDetail extends LightningElement {
               this.originalData = JSON.parse(JSON.parse(data[0]));
             }
             console.log('detailData : ' + JSON.stringify(this.detaildata));
-
-            // Take commonFilter Code for early usage basis
-            let sql = this.reportData.Report_Soql__c.split('from');
-            let fields = sql[0].split('select')[1].trim().split(',');
-            this.detail = fields;
-            if (this.reportData.Report_Header__c != undefined) {
-              if (this.reportData.Report_Header__c.includes(',')) {
-                  this.cfHeaderlist = this.reportData.Report_Header__c.split(',');
-              }
-              else {
-                  this.cfHeaderlist.push(this.reportData.Report_Header__c);
-              }
-            }
-            // Set this.headerdata
-            this.headerdata = JSON.parse(JSON.stringify(this.cfHeaderlist));
-            // Added by Raj
-            if (this.reportData.Numeric_Fields__c != undefined) {
-              if (this.reportData.Numeric_Fields__c.includes(',')) {
-                this.cfHeaderfields = this.reportData.Numeric_Fields__c.split(',');
-              }
-              else {
-                this.cfHeaderfields.push(this.reportData.Numeric_Fields__c.trim());
-              }
-            }
-            if (this.reportData.Date_Time_Fields__c != undefined) {
-              if (this.reportData.Date_Time_Fields__c.includes(',')) {
-                this.cfReportdatetimefields = this.reportData.Date_Time_Fields__c.split(',');
-              }
-              else {
-                this.cfReportdatetimefields.push(this.reportData.Date_Time_Fields__c.trim());
-              }
-            }
-            if (this.reportData.Date_Fields__c != undefined) {
-              if (this.reportData.Date_Fields__c.includes(',')) {
-                this.cfReportdatefields = this.reportData.Date_Fields__c.split(',');
-              }
-              else {
-                this.cfReportdatefields.push(this.reportData.Date_Fields__c.trim());
-              }
-            }
-            // Set this.header, columnType, columnName and sortOder
-            var headingData = [];
-            for(let i = 0; i < this.cfHeaderlist.length; i++) {
-              let colType = 'String';
-              if(this.cfHeaderfields.includes(this.detail[i])) {
-                colType = 'Integer';
-              } else if (this.cfReportdatefields.includes(this.detail[i]) || this.cfReportdatetimefields.includes(this.detail[i])) {
-                colType = 'Date';
-              }
-              if(i == 0) {
-                if(this.headerdata.includes('Activation Date')) {
-                  this.columnName = "Activation Date";
-                  this.columnType = 'Date';
-                  this.sortOrder = 'asc';
-                } else {
-                  this.columnName = this.headerdata[i];
-                  this.columnType = colType;
-                  this.sortOrder = 'desc';
-                }
-                headingData.push({ id: i, name: this.cfHeaderlist[i], colName: this.cfHeaderlist[i], colType: colType, arrUp: true, arrDown: false });
-              } else {
-                headingData.push({ id: i, name: this.cfHeaderlist[i], colName: this.cfHeaderlist[i], colType: colType, arrUp: false, arrDown: false });
-              }
-            }
-            this.header = JSON.parse(JSON.stringify(headingData));
-            console.log("this.header", this.header);
-            // Added by Raj
-            // Added by Raj
 
             if (this.detaildata.length > 0) {
               this.showbuttons = true;
@@ -1748,12 +1759,45 @@ export default class ReportDetail extends LightningElement {
             }
           })
           .catch(error => {
-            console.log("error for dropdown list", JSON.parse(JSON.stringify(error)));
+            console.log("error in dropdown list", JSON.parse(JSON.stringify(error)));
+            this.showbuttons = false;
+            this.ishow = true;
+            // this.recordDisplay = false;
+            this.finaldata = [];
+            setTimeout(() => {
+              this.dispatchEvent(
+                new CustomEvent("hide", { detail: '' })
+              );
+            }, 2000);
+            this.dispatchEvent(
+              new CustomEvent("toastmessage", {
+                detail: {
+                  errormsg: "error",
+                  message: "System Error: A team member has been notified to identify and address the issue within a working day.If it is urgent, please contact support for a solution."
+                }
+              })
+            )
           })
       })
       .catch(error => {
-        console.log("error for report list", JSON.parse(JSON.stringify(error)))
-
+        console.log("error in report list", JSON.parse(JSON.stringify(error)));
+        this.showbuttons = false;
+        this.ishow = true;
+        // this.recordDisplay = false;
+        this.finaldata = [];
+        setTimeout(() => {
+          this.dispatchEvent(
+            new CustomEvent("hide", { detail: '' })
+          );
+        }, 2000);
+        this.dispatchEvent(
+          new CustomEvent("toastmessage", {
+            detail: {
+              errormsg: "error",
+              message: "System Error: A team member has been notified to identify and address the issue within a working day.If it is urgent, please contact support for a solution."
+            }
+          })
+        )
       })
   }
   formatNumberWithCommas(number) {

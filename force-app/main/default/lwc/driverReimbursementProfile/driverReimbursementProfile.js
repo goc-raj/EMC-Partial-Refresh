@@ -1195,7 +1195,7 @@ export default class DriverReimbursementProfile extends LightningElement {
 
   driverDetailsList(data) {
     let contactList = this.proxyToObject(data);
-    // console.log("contact", contactList);
+    console.log("contact", contactList);
     this.lengthOfContact = contactList.length > 0 ? true : false;
     this.myTA = contactList[0].Time_Attandance__c ? true : false;
     this.biweekly =

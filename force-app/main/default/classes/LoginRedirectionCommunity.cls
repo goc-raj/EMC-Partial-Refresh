@@ -2,7 +2,7 @@ public with sharing class LoginRedirectionCommunity {
   @AuraEnabled
   public static object getParameters() {   
       User u = new User();         
-      u = [SELECT id,Profile.Name,contactid,contact.Accountid,contact.showTeamRecord__c FROM user WHERE id =: userinfo.getuserid()];
+      u = [SELECT id, Profile.Name, contactid, contact.Accountid, contact.showTeamRecord__c, contact.Role__c FROM user WHERE id =: userinfo.getuserid()];
       return u;
   }
 
