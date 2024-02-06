@@ -1127,6 +1127,28 @@ export default class ReportDetail extends LightningElement {
     }
   }
 
+  handleDateChange(event) {
+    let convertedDate = event.detail;
+    let dateType = event.target.dataset.key;
+    console.log('dateType : ' + dateType);
+    let formattedDate;
+    if(convertedDate) {
+      var dateParts = convertedDate.split('/');
+      var month = dateParts[0];
+      var day = dateParts[1];
+      var year = dateParts[2].slice(-2);
+      formattedDate =  month + '/' + day + '/' + year;
+    } else {
+      formattedDate = '';
+    }
+
+    if(dateType == "fromDate") {
+      this.from_Date = formattedDate;
+    } else if(dateType == 'toDate') {
+      this.to_Date = formattedDate;
+    }
+  }
+
 
   handleApply() {
     this.dispatchEvent(
@@ -1162,8 +1184,8 @@ export default class ReportDetail extends LightningElement {
       this.to_Date = edate.split('/')[0] + '/' + edate.split('/')[1] + '/20' + edate.split('/')[2];
     } else {
       if (this.from_Date) {
-        this.from_Date = this.template.querySelector(`.date-selector[data-id="fromDate"]`).value;
-        this.to_Date = this.template.querySelector(`.date-selector[data-id="toDate"]`).value;
+        this.from_Date = this.from_Date;
+        this.to_Date = this.to_Date;
       }
     }
     if (this.from_Date == undefined) {

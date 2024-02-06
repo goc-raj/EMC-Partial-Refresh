@@ -1122,7 +1122,9 @@ export default class NewDatatableComponent extends LightningElement {
       }
     }
     handleCloseModal(){
-      console.log("in close",this.Accounts.length)
+      console.log("in close",this.Accounts.length);
+      this.fromDate = null;
+      this.toDate = null;
       if(this.Accounts.length > 0){
         let boxes = this.template.querySelectorAll('.checkboxCheckUncheckSearch')
           for(let i=0; i<boxes.length; i++) {
@@ -1379,9 +1381,32 @@ export default class NewDatatableComponent extends LightningElement {
         }
       }  
     }
+
+    handleDateChange(event) {
+      let convertedDate = event.detail;
+      let dateType = event.target.dataset.key;
+      console.log('dateType : ' + dateType);
+      let formattedDate;
+      if(convertedDate) {
+        var dateParts = convertedDate.split('/');
+        var month = dateParts[0];
+        var day = dateParts[1];
+        var year = dateParts[2].slice(-2);
+        formattedDate =  month + '/' + day + '/' + year;
+      } else {
+        formattedDate = '';
+      }
+  
+      if(dateType == "tripFromDate") {
+        this.fromDate = formattedDate;
+      } else if(dateType == 'tripToDate') {
+        this.toDate = formattedDate;
+      }
+    }
+
     async handledownloadCSV(){
-      let fdate = this.template.querySelector(`.date-selector[data-id="from_date"]`).value;
-      let todate = this.template.querySelector(`.date-selector[data-id="to_date"]`).value;
+      let fdate = this.fromDate;
+      let todate = this.toDate;
       let exportList = await this.exportExcelByDateRange();
       if (exportList) {
              let rowEnd = '\n';
@@ -1461,8 +1486,8 @@ export default class NewDatatableComponent extends LightningElement {
     try {
       const accidparavalue  = this.getUrlParamValue(location.href, 'accid')
        const idparavalue  = this.getUrlParamValue(location.href, 'id')
-       let fdate = this.template.querySelector(`.date-selector[data-id="from_date"]`).value;
-       let todate = this.template.querySelector(`.date-selector[data-id="to_date"]`).value;
+       let fdate = this.fromDate;
+       let todate = this.toDate;
        
        let convertFromDate = excelFormatDate(fdate);
        let convertToDate = excelFormatDate(todate);
@@ -1494,6 +1519,8 @@ export default class NewDatatableComponent extends LightningElement {
       if (this.template.querySelector('c-user-profile-modal')) {
         this.template.querySelector('c-user-profile-modal[data-id="export_trip"]').hide();
       }
+      this.fromDate = null;
+      this.toDate = null;
     }
     handleButtonClick(){
         this.advancesearch = true;

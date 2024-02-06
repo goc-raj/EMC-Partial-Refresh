@@ -40,7 +40,7 @@ export default class AdvanceSearchComponent extends LightningElement {
     tomileges = '';
     driverId = '';
     allowRenderCallback = true;
-    
+
     renderedCallback(){
       if(this.allowRenderCallback == true){
         setTimeout(() => {
@@ -55,6 +55,27 @@ export default class AdvanceSearchComponent extends LightningElement {
       if (event.key === 'Escape') {
           // Close the modal when "Escape" key is pressed
           datepicker.destroy();
+      }
+    }
+
+    handleDateChange(event) {
+      let convertedDate = event.detail;
+      let dateType = event.target.dataset.key;
+      let formattedDate;
+      if(convertedDate) {
+        var dateParts = convertedDate.split('/');
+        var month = dateParts[0];
+        var day = dateParts[1];
+        var year = dateParts[2].slice(-2);
+        formattedDate =  month + '/' + day + '/' + year;
+      } else {
+        formattedDate = '';
+      }
+
+      if(dateType == "tripFromDate") {
+        this.fromdate = formattedDate;
+      } else if(dateType == 'tripToDate') {
+        this.todate = formattedDate;
       }
     }
 
@@ -518,8 +539,8 @@ export default class AdvanceSearchComponent extends LightningElement {
         this.allowRenderCallback = false;
         this.template.querySelector('.milege_from').value =  null;
         this.template.querySelector('.milege_to').value =  null;
-        this.template.querySelector(`.date-selector[data-id="from_date"]`).value = '';
-        this.template.querySelector(`.date-selector[data-id="to_date"]`).value = '';
+        // this.template.querySelector(`.date-selector[data-id="from_date"]`).value = '';
+        // this.template.querySelector(`.date-selector[data-id="to_date"]`).value = '';
         this.template.querySelector(`c-select2-dropdown[data-id="driver_dropdown"]`).selectedValue = '';
         this.template.querySelector(`c-select2-dropdown[data-id="tag_dropdown"]`).selectedValue = '';
         this.template.querySelector(`c-select2-dropdown[data-id="status_dropdown"]`).selectedValue = '';
@@ -552,8 +573,8 @@ export default class AdvanceSearchComponent extends LightningElement {
         this.allowRenderCallback = false;
         this.template.querySelector('.milege_from').value =  null;
         this.template.querySelector('.milege_to').value =  null;
-        this.template.querySelector(`.date-selector[data-id="from_date"]`).value = '';
-        this.template.querySelector(`.date-selector[data-id="to_date"]`).value = '';
+        // this.template.querySelector(`.date-selector[data-id="from_date"]`).value = '';
+        // this.template.querySelector(`.date-selector[data-id="to_date"]`).value = '';
         this.template.querySelector(`c-select2-dropdown[data-id="driver_dropdown"]`).selectedValue = '';
         this.template.querySelector(`c-select2-dropdown[data-id="tag_dropdown"]`).selectedValue = '';
         this.template.querySelector(`c-select2-dropdown[data-id="status_dropdown"]`).selectedValue = '';
@@ -584,8 +605,8 @@ export default class AdvanceSearchComponent extends LightningElement {
           this.dispatchEvent(selectEvent);
       }
       handleSearchEvent() {
-        let startdate = this.template.querySelector(`.date-selector[data-id="from_date"]`).value;
-            let todate = this.template.querySelector(`.date-selector[data-id="to_date"]`).value;
+            let startdate = this.fromdate;
+            let todate = this.todate;
             let convertFromDate ;
             let convertToDate ;
             if(startdate.length > 0){
