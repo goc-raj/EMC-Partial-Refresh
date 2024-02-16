@@ -1,3 +1,12 @@
+<!-- /**
+ * @Author: GetonCRM Solutions LLP
+ * @Description: This batch class is use for post a variable amount on monthly basis.
+ * @Modification logs
+ * ========================================================================================================================
+ * @Date: 12 February 2024 | Raj Joshi
+ * @description: Edit variable name for Quarterly Amount.
+ */ -->
+
 <template>
     <!-- <lightning-card> -->
         <div class="report_header">
@@ -44,7 +53,7 @@
                         <td class="mil_title">Mileage: <span class="mileage_amount">{taxdetail.Mileages} </span></td>
                         <td class="reim_title">Total Reimbursement: <span class="reimburse_amount">${taxdetail.Reimbursements} </span></td>
                         <td class="irs_title">Max IRS Amount: <span class="max_irs_amount">${taxdetail.MaxIRSrate} </span></td>
-                        <td class="liability_title"><div class="quarte_div">Q{taxdetail.quarterno} Tax Liability:</div> <div class="tax_liability_amount">${taxdetail.Reimbursements} </div></td>
+                        <td class="liability_title"><div class="quarte_div">Q{taxdetail.quarterno} Tax Liability:</div> <div class="tax_liability_amount">${taxdetail.ImputedAmount} </div></td>
                     </tr>
                 </template>
             </div>

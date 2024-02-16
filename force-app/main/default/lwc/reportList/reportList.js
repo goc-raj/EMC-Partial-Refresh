@@ -1,3 +1,12 @@
+/**
+ * @Author: GetonCRM Solutions LLP
+ * @Description: This batch class is use for post a variable amount on monthly basis.
+ * @Modification logs
+ * ========================================================================================================================
+ * @Date:  |
+ * @description:
+ */
+
 import { LightningElement } from 'lwc';
 import getReports from '@salesforce/apex/ReportListController.getAllReports';
 import updatelockdate from '@salesforce/apex/ReportListController.updateLockDate';

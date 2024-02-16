@@ -1,3 +1,13 @@
+<!-- /**
+ * @Author: GetonCRM Solutions LLP
+ * @Description: This batch class is use for post a variable amount on monthly basis.
+ * @Modification logs
+ * ========================================================================================================================
+ * @Date: 06 February 2024 | Raj Joshi
+ * @description: Add datepicker LWC component,
+                 Remove code of previous datepicker code that use static resource.
+ */ -->
+
 <template>
     <div class="box-container">
         <div class="slds-form">
@@ -61,10 +71,14 @@
               <div class="main_class">
                 <div class="row1">
                     <label class="slds-form-element__label date_label date_label_02" for="mileageInput-01">Trip Date</label>
-                    <c-date-picker date={fromdate}  data-key="tripFromDate" ondateselect={handleDateChange}></c-date-picker>
+                    <!-- Use new datepicker LWC -->
+                    <c-date-picker date={fromdate}  data-key="tripFromDate" ondateselect={handleDateChange} place-holder="From"></c-date-picker>
+                    <!-- Added by Raj -->
                 </div>
                 <div class="row1 width-small">
-                    <c-date-picker date={todate}  data-key="tripToDate" ondateselect={handleDateChange}></c-date-picker>
+                    <!-- Use new datepicker LWC -->
+                    <c-date-picker date={todate}  data-key="tripToDate" ondateselect={handleDateChange} place-holder="To"></c-date-picker>
+                    <!-- Added by Raj -->
                 </div>
                 <div  class="div_mileges">
                             

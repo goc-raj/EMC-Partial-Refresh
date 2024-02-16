@@ -1,3 +1,14 @@
+/**
+ * @Author: GetonCRM Solutions LLP
+ * @Description: This batch class is use for post a variable amount on monthly basis.
+ * @Modification logs
+ * ========================================================================================================================
+ * @Date: 09 February 2024 | Raj Joshi
+ * @description: Do changes in handleSearchEvent function,
+                 Remove code of previous datepicker code that use static resource,
+                 Add handleDateChange function.
+ */
+
 import { LightningElement  , api} from 'lwc';
 import fetchLookUpValues from '@salesforce/apex/GetDriverData.fetchLookUpValues';
 import getMilegesData from '@salesforce/apex/GetDriverData.getMilegesData';
@@ -41,23 +52,8 @@ export default class AdvanceSearchComponent extends LightningElement {
     driverId = '';
     allowRenderCallback = true;
 
-    renderedCallback(){
-      if(this.allowRenderCallback == true){
-        setTimeout(() => {
-          if(this.template.querySelectorAll('.date-selector').length > 0){
-            this.intializeDatepickupnew();
-          }
-        },1000);
-      }  
-    }
-    handleEscKey(event) {
-      console.log("in key",event.key)
-      if (event.key === 'Escape') {
-          // Close the modal when "Escape" key is pressed
-          datepicker.destroy();
-      }
-    }
 
+    // Function to handle event when click on date input
     handleDateChange(event) {
       let convertedDate = event.detail;
       let dateType = event.target.dataset.key;
@@ -78,9 +74,9 @@ export default class AdvanceSearchComponent extends LightningElement {
         this.todate = formattedDate;
       }
     }
+    // Added by Raj
 
     connectedCallback(){
-      document.addEventListener('keydown', this.handleEscKey.bind(this));
       this.getDriverOption();
       this.getTagsOption();
       this.getStatusOption();
@@ -98,21 +94,7 @@ export default class AdvanceSearchComponent extends LightningElement {
         }
       }
     }
-    handleEscKey(event) {
-      // Check if the pressed key is "Esc" (key code 27)
-      if (event.keyCode === 27) {
-        console.log("in key event")
-       
-        let $jq = jQuery.noConflict();
-        // $jq(".date-selector").datepicker("hide")
-        let $input = $jq(this.template.querySelectorAll('.date-selector'))
-        $input.each(function(index) {
-          let _self2 =  $jq(this)
-          _self2.datepicker({showEvent: 'none'}).data('datepicker').hide();
-        })
-      }
-    }
-   
+    
     keyHandler(event) {
       const keyCode = event.keyCode || event.which;
       const keyValue = String.fromCharCode(keyCode);
@@ -140,155 +122,7 @@ export default class AdvanceSearchComponent extends LightningElement {
         this.template.querySelector(`c-select2-dropdown[data-id="driver_dropdown"]`).options = this.options;
       }
     }
-    intializeDatepickupnew(){
-        let $jq = jQuery.noConflict();
-        let $input = $jq(this.template.querySelectorAll('.date-selector'))
-        let _self = this
-        $input.each(function(index) {
-              let _self2 = $jq(this)
-              let $btn = $jq(this).next()
 
-              $jq(this).datepicker({
-                // inline mode
-                inline: false,
-    
-                // additional CSS class
-                classes: 'flatpickr-cal',
-    
-                // language
-                language: 'en',
-    
-                // start date
-                startDate: new Date(),
-                //selectedDates: new Date(),
-                
-                // array of day's indexes
-                weekends: [6, 0],
-    
-                // custom date format
-                dateFormat:'mm/dd/yy',
-    
-                // Alternative text input. Use altFieldDateFormat for date formatting.
-                altField: '',
-    
-                // Date format for alternative field.
-                altFieldDateFormat: '@',
-    
-                // remove selection when clicking on selected cell
-                toggleSelected: false,
-    
-                // keyboard navigation
-                keyboardNav: false,
-    
-                // position
-                position: 'bottom left',
-                offset: 12,
-    
-                // days, months or years
-                view: 'days',
-                minView: 'days',
-                showOtherMonths: true,
-                selectOtherMonths: true,
-                moveToOtherMonthsOnSelect: true,
-    
-                showOtherYears: true,
-                selectOtherYears: true,
-                moveToOtherYearsOnSelect: true,
-    
-                minDate: '',
-                maxDate: '',
-                disableNavWhenOutOfRange: true,
-    
-                multipleDates: false, // Boolean or Number
-                multipleDatesSeparator: ',',
-                range: false,
-                isMobile: false,
-                // display today button
-                todayButton: new Date(),
-    
-                // display clear button
-                clearButton: false,
-                
-                // Event type
-                showEvent: 'focus',
-    
-                // auto close after date selection
-                autoClose: true,
-    
-                // navigation
-                monthsFiled: 'monthsShort',
-                prevHtml: '<svg><path d="M 17,12 l -5,5 l 5,5"></path></svg>',
-                nextHtml: '<svg><path d="M 14,12 l 5,5 l -5,5"></path></svg>',
-                navTitles: {
-                    days: 'M <i>yyyy</i>',
-                    months: 'yyyy',
-                    years: 'yyyy1 - yyyy2'
-                },
-    
-                // timepicker
-                datepicker: true,
-                timepicker: false,
-                onlyTimepicker: false,
-                dateTimeSeparator: ' ',
-                timeFormat: '',
-                minHours: 0,
-                maxHours: 24,
-                minMinutes: 0,
-                maxMinutes: 59,
-                hoursStep: 1,
-                minutesStep: 1,
-    
-                // callback events
-                onSelect: function(date, formattedDate, datepicker){
-
-                     if(index ===  0){
-                      let fromdate = date;
-                      _self.fromdate =  fromdate;
-                     }
-                     if(index ===  1){
-                      let todate = date;
-                      _self.todate =  todate;
-                     }
-                     
-                },
-                
-                onShow: function (dp, animationCompleted) {
-                if (!animationCompleted) {
-                  if (dp.$datepicker.find('span.datepicker--close--button').html()===undefined) { /*ONLY when button don't existis*/
-                      dp.$datepicker.find('div.datepicker--buttons').append('<span  class="datepicker--close--button">Close</span>');
-                      dp.$datepicker.find('span.datepicker--close--button').click(function() {
-                        dp.hide();
-                      });
-                  }
-                }
-              },
-                //onShow: '',
-                onHide: '',
-                onChangeMonth: '',
-                onChangeYear: '',
-                onChangeDecade: '',
-                onChangeView: '',
-                // eslint-disable-next-line consistent-return
-                onRenderCell: function(date){
-                    if (date.getDay() === 0) {
-                          return {
-                              classes: 'color-weekend-sunday'
-                          }
-                    }
-                      if (date.getDay() === 6) {
-                          return {
-                              classes: 'color-weekend-saturday'
-                          }
-                    }
-                }
-              })//.data('datepicker').selectDate(new Date(_self2.val()))
-              $btn.on('click', function(){
-                _self2.focus();
-              });
-              
-
-        })
-      }
       ///for Driver Options
       getDriverOption(){
         fetchLookUpValues({
@@ -539,8 +373,6 @@ export default class AdvanceSearchComponent extends LightningElement {
         this.allowRenderCallback = false;
         this.template.querySelector('.milege_from').value =  null;
         this.template.querySelector('.milege_to').value =  null;
-        // this.template.querySelector(`.date-selector[data-id="from_date"]`).value = '';
-        // this.template.querySelector(`.date-selector[data-id="to_date"]`).value = '';
         this.template.querySelector(`c-select2-dropdown[data-id="driver_dropdown"]`).selectedValue = '';
         this.template.querySelector(`c-select2-dropdown[data-id="tag_dropdown"]`).selectedValue = '';
         this.template.querySelector(`c-select2-dropdown[data-id="status_dropdown"]`).selectedValue = '';
@@ -573,8 +405,6 @@ export default class AdvanceSearchComponent extends LightningElement {
         this.allowRenderCallback = false;
         this.template.querySelector('.milege_from').value =  null;
         this.template.querySelector('.milege_to').value =  null;
-        // this.template.querySelector(`.date-selector[data-id="from_date"]`).value = '';
-        // this.template.querySelector(`.date-selector[data-id="to_date"]`).value = '';
         this.template.querySelector(`c-select2-dropdown[data-id="driver_dropdown"]`).selectedValue = '';
         this.template.querySelector(`c-select2-dropdown[data-id="tag_dropdown"]`).selectedValue = '';
         this.template.querySelector(`c-select2-dropdown[data-id="status_dropdown"]`).selectedValue = '';

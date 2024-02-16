@@ -1,3 +1,12 @@
+/**
+ * @Author: GetonCRM Solutions LLP
+ * @Description: This batch class is use for post a variable amount on monthly basis.
+ * @Modification logs
+ * ========================================================================================================================
+ * @Date: 11 January 2024 | Raj Joshi
+ * @description: New Component
+ */
+
 import { LightningElement, wire } from 'lwc';
 import bgImageAutumn from "@salesforce/resourceUrl/LoginPageBGAutumn";
 import bgImageSpring from "@salesforce/resourceUrl/LoginPageBGSpring";

@@ -230,14 +230,14 @@ export default class NavigationMenu extends LightningElement {
            tooltips.forEach(tooltip => {
               //console.log(tooltip.getBoundingClientRect(), tooltip.parentElement.getBoundingClientRect())
                 let v = tooltip.parentElement.getBoundingClientRect().y - tooltip.getBoundingClientRect().y;
-                tooltip.style.marginTop = ((v - menu.scrollTop) - tooltip.parentElement.getBoundingClientRect().height) - 49 +"px"; 
+                tooltip.style.marginTop = ((v - menu.scrollTop) - tooltip.parentElement.getBoundingClientRect().height) - 35 +"px"; 
                 //-35 is the default marginTop value of tooltip
             });
         }else{
           tooltips.forEach(tooltip => {
             //console.log(tooltip.getBoundingClientRect(), tooltip.parentElement.getBoundingClientRect())
               let v = tooltip.parentElement.getBoundingClientRect().y - tooltip.getBoundingClientRect().y;
-              tooltip.style.marginTop = (v - menu.scrollTop) - 49 +"px"; 
+              tooltip.style.marginTop = (v - menu.scrollTop) - 35 +"px"; 
               //-8 is the default marginTop value of tooltip
           });
         }

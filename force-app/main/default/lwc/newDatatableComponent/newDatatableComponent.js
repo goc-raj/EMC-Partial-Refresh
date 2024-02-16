@@ -1,3 +1,14 @@
+/**
+ * @Author: GetonCRM Solutions LLP
+ * @Description: This batch class is use for post a variable amount on monthly basis.
+ * @Modification logs
+ * ========================================================================================================================
+ * @Date: 09 February 2024 | Raj Joshi
+ * @description: Do changes in handleSearchEvent function,
+                 Remove code of previous datepicker code that use static resource,
+                 Add handleDateChange function.
+ */
+
 import { LightningElement , api } from 'lwc';
 import { loadStyle , loadScript } from 'lightning/platformResourceLoader';
 import DRIVER_TAX_REPORT from '@salesforce/resourceUrl/MilegesDynamicTable';
@@ -1319,11 +1330,6 @@ export default class NewDatatableComponent extends LightningElement {
       this.styleheader = "slds-modal__container slds-m-top_medium"
         if (this.template.querySelector('c-user-profile-modal')) {
           this.template.querySelector('c-user-profile-modal[data-id="export_trip"]').show();
-          setTimeout(() => {
-            if(this.template.querySelectorAll('.date-selector').length > 0){
-              this.intializeDatepickup();
-            }
-          },1000);
       }  
     }
    
@@ -1382,6 +1388,7 @@ export default class NewDatatableComponent extends LightningElement {
       }  
     }
 
+    // Function to handle event when click on date input
     handleDateChange(event) {
       let convertedDate = event.detail;
       let dateType = event.target.dataset.key;
@@ -1403,6 +1410,7 @@ export default class NewDatatableComponent extends LightningElement {
         this.toDate = formattedDate;
       }
     }
+    // Added by Raj
 
     async handledownloadCSV(){
       let fdate = this.fromDate;
@@ -1627,157 +1635,11 @@ export default class NewDatatableComponent extends LightningElement {
     }else{
       this.xlsData.push(data);
     }
-    
+
     console.log("this.xlsData",JSON.stringify(this.xlsData))
     this.template.querySelector("c-excel-sheet").download(this.xlsHeader, this.xlsData);
   }
- 
-  intializeDatepickup(){
-    let $jq = jQuery.noConflict();
-    let $input =  $jq(this.template.querySelectorAll('.date-selector'));
-    let _self = this;
-    $input.each(function(index) {
-      console.log("index",index)
-          let _self2 =  $jq(this)
-          let $btn =  $jq(this).next()
-          console.log("this",this)
-          $jq(this).datepicker({
 
-            // inline mode
-            inline: false,
-
-            // additional CSS class
-            classes: 'flatpickr-cal',
-
-            // language
-            language: 'en',
-
-            // start date
-            startDate: new Date(),
-            //selectedDates: new Date(),
-            
-            // array of day's indexes
-            weekends: [6, 0],
-
-            // custom date format
-            dateFormat:'mm/dd/yy',
-
-            // Alternative text input. Use altFieldDateFormat for date formatting.
-            altField: '',
-
-            // Date format for alternative field.
-            altFieldDateFormat: '@',
-
-            // remove selection when clicking on selected cell
-            toggleSelected: false,
-
-            // keyboard navigation
-            keyboardNav: false,
-
-            // position
-            position: 'bottom left',
-            offset: 12,
-
-            // days, months or years
-            view: 'days',
-            minView: 'days',
-            showOtherMonths: true,
-            selectOtherMonths: true,
-            moveToOtherMonthsOnSelect: true,
-
-            showOtherYears: true,
-            selectOtherYears: true,
-            moveToOtherYearsOnSelect: true,
-
-            minDate: '',
-            maxDate: '',
-            disableNavWhenOutOfRange: true,
-
-            multipleDates: false, // Boolean or Number
-            multipleDatesSeparator: ',',
-            range: false,
-            isMobile: false,
-            // display today button
-            todayButton: new Date(),
-
-            // display clear button
-            clearButton: false,
-            
-            // Event type
-            showEvent: 'focus',
-
-            // auto close after date selection
-            autoClose: true,
-
-            // navigation
-            monthsFiled: 'monthsShort',
-            prevHtml: '<svg><path d="M 17,12 l -5,5 l 5,5"></path></svg>',
-            nextHtml: '<svg><path d="M 14,12 l 5,5 l -5,5"></path></svg>',
-            navTitles: {
-                days: 'M <i>yyyy</i>',
-                months: 'yyyy',
-                years: 'yyyy1 - yyyy2'
-            },
-            
-            // timepicker
-            datepicker: true,
-            timepicker: false,
-            onlyTimepicker: false,
-            dateTimeSeparator: ' ',
-            timeFormat: '',
-            minHours: 0,
-            maxHours: 24,
-            minMinutes: 0,
-            maxMinutes: 59,
-            hoursStep: 1,
-            minutesStep: 1,
-            // callback events
-            onSelect: function(date, formattedDate, datepicker){
-                console.log('explain:', date, formattedDate, datepicker, _self2.val());
-                console.log('selected date', date);
-               
-            },
-            onShow: function (dp, animationCompleted) {
-              console.log('selected date');
-              if (!animationCompleted) {
-                if (dp.$datepicker.find('span.datepicker--close--button').html()===undefined) { /*ONLY when button don't existis*/
-                    dp.$datepicker.find('div.datepicker--buttons').append('<span  class="datepicker--close--button">Close</span>');
-                    dp.$datepicker.find('span.datepicker--close--button').click(function() {
-                      dp.hide();
-                      console.log('onshow');
-                    });
-                }
-              }
-            },
-            // onShow: '',
-            onHide: '',
-            onChangeMonth: '',
-            onChangeYear: '',
-            onChangeDecade: '',
-            onChangeView: '',
-            // eslint-disable-next-line consistent-return
-            onRenderCell: function(date){
-                if (date.getDay() === 0) {
-                      return {
-                          classes: 'color-weekend-sunday'
-                      }
-                }
-                  if (date.getDay() === 6) {
-                      return {
-                          classes: 'color-weekend-saturday'
-                      }
-                }
-            }
-          })//.data('datepicker').selectDate(new Date(_self2.val()))
-          $btn.on('click', function(){
-            console.log('btnon');
-            _self2.datepicker({showEvent: 'none'}).data('datepicker').show();
-            _self2.focus();
-          });
-    })
-  }
-
-  
   handlefilterdata(event){
     this.dispatchEvent(
       new CustomEvent("showloader", { detail :{ message: 'Please wait while we load your data'}})

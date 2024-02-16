@@ -151,8 +151,8 @@ export default class UsersRoster extends LightningElement {
 			element.toggle = false;
 			element.isChecked = false;
 			element.isEdited = false;
-			element.checkbox = true;
-			//element.checkbox = (this.currentActivity === 'Send Driver Packet') ? (element.packet === '' || element.packet === 'Sent To Driver') ? true : false : true;
+			//element.checkbox = true;
+			element.checkbox = (this.currentActivity === 'Send Driver Packet') ? (element.packet === '' || element.packet === 'Sent To Driver') ? true : false : true;
             element.keyFields = this.mapOrder(model, keyFields, 'key');
         });
 		this.employeeList = data;

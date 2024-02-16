@@ -1,3 +1,12 @@
+/**
+ * @Author: GetonCRM Solutions LLP
+ * @Description: This batch class is use for post a variable amount on monthly basis.
+ * @Modification logs
+ * ========================================================================================================================
+ * @Date: 12 February 2024 | Raj Joshi
+ * @description: Add toFixed(2) for decimal fields.
+ */
+
 import { LightningElement , wire , track ,api} from 'lwc';
 // import getDriverList from '@salesforce/apex/ReportComplianceofDriver.getDriversDetails';
 // import getReportDetail from '@salesforce/apex/ReportComplianceofDriver.getComplianceCalculation';
@@ -220,13 +229,15 @@ export default class DriverTaxLiabilityReport extends LightningElement {
                 
             let jsondata = this.JsonToStringifyData(arr2);
             
+            // Add toFixed for two decimal places
             jsondata.forEach( detaildata => {
                 detailExcel.push({ DriverName:detaildata.drivername, Email:detaildata.emailid ,  
                                         EmployeeID:detaildata.employeeid ,Month:detaildata.month, Year:detaildata.year,
-                                        TotalReimbursement:'$'+detaildata.totalreim, IRSAllowable:'$'+detaildata.iRSallowable ,
-                                        ImputedIncome:'$'+detaildata.imputedincome});
+                                        TotalReimbursement:'$'+detaildata.totalreim.toFixed(2), IRSAllowable:'$'+detaildata.iRSallowable.toFixed(2) ,
+                                        ImputedIncome:'$'+detaildata.imputedincome.toFixed(2)});
                 return detailExcel;
             })
+            // Added by Raj
             this.downloaddetail = this.JsonToStringifyData(detailExcel);
             /************End for Detail Excel**********/
 

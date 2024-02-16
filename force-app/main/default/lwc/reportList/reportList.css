@@ -238,8 +238,8 @@
   }
   .display_div{
     display: flex;
-    /* margin: 10px 4px; */
-    border-radius: 5px;
+    margin: 0 6px 0 0;
+    border-radius: 10px;
     padding: 3px 15px;
     /* max-height: 26px; */
   }
@@ -344,6 +344,7 @@ input[type=checkbox]  + label > span{
   left: 45px;
 }
 
+/* Add CSS for download button and style adkustment */
 .btn-trip-download{
   display: inline-block;
   text-align: center;
@@ -365,5 +366,24 @@ input[type=checkbox]  + label > span{
 
 .listContact {
   overflow-y: auto;
-  height: 45%;
+  height: 44%;
 }
+
+@media only screen 
+  and (min-device-width: 768px) 
+  and (max-device-width: 1024px) 
+  and (-webkit-min-device-pixel-ratio: 1) {
+    .listContact {
+      height: 58%;
+    }
+}
+@media screen 
+  and (min-device-width: 1200px) 
+  and (max-device-width: 1600px) 
+  and (-webkit-min-device-pixel-ratio: 2)
+  and (min-resolution: 192dpi) { 
+    .listContact {
+      height: 60%;
+    }
+}
+/* Added by Raj */

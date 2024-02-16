@@ -337,7 +337,6 @@ export default class ChartLwr extends LightningElement {
                         title: {
                             text: null
                         },
-                        tickInterval: 50,
                         labels:{
                             style:{
                                 color: "#000000",

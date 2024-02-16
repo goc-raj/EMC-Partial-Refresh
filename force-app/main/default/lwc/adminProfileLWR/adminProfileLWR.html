@@ -63,6 +63,11 @@
                     managers={managers} roles={roles} job-titles={jobTitles} departments={departments} companies={companies} vehicle-type={vehicleType} driver-types={driverTypes}
                             ontoast={showToast} onshow={showSpinner} onhide={hideSpinner} onerror={showErrorToast} onbacktodashboard={backToDashboard}></c-users-roster>
             </template>
+            <template  lwc:elseif={showTools}>
+                <c-user-tools contact-id={contactId} account-id={accountId} onuserpreview={handleUserNavigate} 
+                onshow={showSpinner} onhide={hideSpinner}  ontoast={showToast} onshowloader={showConditionalLoader} 
+                onhideloader={hideConditionalLoader} oncloseparent={closeDialogBox} onbacktodashboard={backToDashboard}></c-user-tools>
+            </template>
             <template lwc:else>
                 <template lwc:if={unapproveMileages}>
                      <c-user-flagging-trip contact-id={contactId} account-id={accountId}  is-account-biweek={biweekAccount} all-reimbursement-list={reimbursement}  header-name={driverName} emailaddress={userEmail} role={userRole} contact-list={unapproveMileages} onback={redirectToMileage} onshow={showSpinner} onhide={hideSpinner} ontoast={showToast} element={unapproveReimbursements} onflagcomplete={handleComplete} onsyncdone={handleSyncDone} redirect-dashboard={isDashboard}></c-user-flagging-trip>

@@ -4,9 +4,6 @@ import getDriverManagerDropdownList from '@salesforce/apex/ReportDetailsControll
 import getReportDetails from '@salesforce/apex/ReportDetailsController.getReportDetail';
 import getManagerDriverDetails from '@salesforce/apex/ReportDetailsController.getAllManagers';
 import { loadStyle, loadScript } from 'lightning/platformResourceLoader';
-import jQueryMinified from '@salesforce/resourceUrl/jQueryMinified';
-import datepicker from '@salesforce/resourceUrl/calendar';
-import customMinifiedDP from '@salesforce/resourceUrl/modalCalDp';
 import updateEditableField from "@salesforce/apex/ReportDetailsController.updateEditableField";
 import checkBiweeklyPayPeriod from "@salesforce/apex/TripDetailsforSightScienceController.checkBiweeklyPayPeriod";
 
@@ -102,27 +99,6 @@ export default class ReportDetail extends LightningElement {
   finaldataSearch = [];
   editedCount = 0;
   renderedCallback() {
-
-    loadScript(this, jQueryMinified)
-      .then(() => {
-        console.log('jquery loaded')
-        Promise.all([
-          loadStyle(this, datepicker + "/minifiedCustomDP.css"),
-          loadStyle(this, datepicker + "/datepicker.css"),
-          loadStyle(this, customMinifiedDP),
-          loadScript(this, datepicker + '/datepicker.js')
-        ]).then(() => {
-          //   this.calendarJsInitialised = true;
-          console.log("script datepicker loaded--");
-          this.intializeDatepickup1();
-        })
-          .catch((error) => {
-            console.error(error);
-          });
-      })
-      .catch(error => {
-        console.log('jquery not loaded ' + error)
-      })
     if (this.librariesLoaded) return;
     this.librariesLoaded = true;
     //to load static resource for xlsx file
@@ -135,21 +111,24 @@ export default class ReportDetail extends LightningElement {
       });
   }
 
+  // Variable for get selected month
   get lastmonth() {
     var makeDate = new Date();
     console.log("getdate", makeDate.getDate());
-    if (makeDate.getDate() > 25) {
-      let newDate = new Date(makeDate.getFullYear(), makeDate.getMonth() + 1, 1);
+    // if (makeDate.getDate() > 25) {
+      let newDate = new Date(makeDate.getFullYear(), makeDate.getMonth(), 0);
       let lastmonth = newDate.toLocaleString('default', { month: 'long' });
       console.log('Current Month : ' + lastmonth);
       return lastmonth;
-    } else {
-      makeDate.setMonth(makeDate.getMonth());
-      let lastmonth = makeDate.toLocaleString('default', { month: 'long' });
-      console.log('Current Month : ' + lastmonth);
-      return lastmonth;
-    }
+    // } else {
+    //   makeDate.setMonth(makeDate.getMonth());
+    //   let lastmonth = makeDate.toLocaleString('default', { month: 'long' });
+    //   console.log('Current Month : ' + lastmonth);
+    //   return lastmonth;
+    // }
   }
+  // Added by Raj
+
   getUrlParamValue(url, key) {
     return new URL(url).searchParams.get(key);
   }
@@ -653,163 +632,6 @@ export default class ReportDetail extends LightningElement {
     this.selectedweek = event.detail.value;
     this.template.querySelector(`c-dropdown-select[data-id="bi_week"]`).toggleStyle(false);
   }
-  intializeDatepickup1() {
-    let $jq = jQuery.noConflict();
-    let $input = $jq(this.template.querySelectorAll('.date-selector'));
-    let _self = this;
-    $input.each(function (index) {
-      console.log("index", index)
-      let _self2 = $jq(this)
-      let $btn = $jq(this).next()
-      console.log("this", this)
-      $jq(this).datepicker({
-
-        // inline mode
-        inline: false,
-
-        // additional CSS class
-        classes: 'flatpickr-cal',
-
-        // language
-        language: 'en',
-
-        // start date
-        startDate: new Date(),
-        //selectedDates: new Date(),
-
-        // array of day's indexes
-        weekends: [6, 0],
-
-        // custom date format
-        dateFormat: 'mm/dd/yy',
-
-        // Alternative text input. Use altFieldDateFormat for date formatting.
-        altField: '',
-
-        // Date format for alternative field.
-        altFieldDateFormat: '@',
-
-        // remove selection when clicking on selected cell
-        toggleSelected: false,
-
-        // keyboard navigation
-        keyboardNav: false,
-
-        // position
-        position: 'bottom left',
-        offset: 12,
-
-        // days, months or years
-        view: 'days',
-        minView: 'days',
-        showOtherMonths: true,
-        selectOtherMonths: true,
-        moveToOtherMonthsOnSelect: true,
-
-        showOtherYears: true,
-        selectOtherYears: true,
-        moveToOtherYearsOnSelect: true,
-
-        minDate: '',
-        maxDate: '',
-        disableNavWhenOutOfRange: true,
-
-        multipleDates: false, // Boolean or Number
-        multipleDatesSeparator: ',',
-        range: false,
-        isMobile: false,
-        // display today button
-        todayButton: new Date(),
-
-        // display clear button
-        clearButton: false,
-
-        // Event type
-        showEvent: 'focus',
-
-        // auto close after date selection
-        autoClose: true,
-
-        // navigation
-        monthsFiled: 'monthsShort',
-        prevHtml: '<svg><path d="M 17,12 l -5,5 l 5,5"></path></svg>',
-        nextHtml: '<svg><path d="M 14,12 l 5,5 l -5,5"></path></svg>',
-        navTitles: {
-          days: 'M <i>yyyy</i>',
-          months: 'yyyy',
-          years: 'yyyy1 - yyyy2'
-        },
-
-        // timepicker
-        datepicker: true,
-        timepicker: false,
-        onlyTimepicker: false,
-        dateTimeSeparator: ' ',
-        timeFormat: '',
-        minHours: 0,
-        maxHours: 24,
-        minMinutes: 0,
-        maxMinutes: 59,
-        hoursStep: 1,
-        minutesStep: 1,
-        // callback events
-        onSelect: function (date, formattedDate, datepicker) {
-          //datepicker.$el.val(_self2.val())
-          console.log('explain:', date, formattedDate, datepicker, _self2.val());
-          console.log('selected date', date);
-          //  console.log('explain:', date, formattedDate, dpicker, _self2.val());
-          if (index == 0) {
-            console.log("if index", index)
-            // let fromdate = date;
-            this.from_Date = date;
-          }
-          if (index == 1) {
-            console.log("if index", index)
-            // let todate = date;
-            this.to_Date = date;
-          }
-          console.log("if index", this.from_Date + this.to_Date)
-        },
-        onShow: function (dp, animationCompleted) {
-          console.log('selected date');
-          //_self.value = dp.$el.val()
-          if (!animationCompleted) {
-            if (dp.$datepicker.find('span.datepicker--close--button').html() === undefined) { /*ONLY when button don't existis*/
-              dp.$datepicker.find('div.datepicker--buttons').append('<span  class="datepicker--close--button">Close</span>');
-              dp.$datepicker.find('span.datepicker--close--button').click(function () {
-                dp.hide();
-                console.log('onshow');
-              });
-            }
-          }
-        },
-        // onShow: '',
-        onHide: '',
-        onChangeMonth: '',
-        onChangeYear: '',
-        onChangeDecade: '',
-        onChangeView: '',
-        // eslint-disable-next-line consistent-return
-        onRenderCell: function (date) {
-          if (date.getDay() === 0) {
-            return {
-              classes: 'color-weekend-sunday'
-            }
-          }
-          if (date.getDay() === 6) {
-            return {
-              classes: 'color-weekend-saturday'
-            }
-          }
-        }
-      }).data('datepicker').selectDate(new Date(_self2.val()))
-      $btn.on('click', function () {
-        console.log('btnon');
-        _self2.datepicker({ showEvent: 'none' }).data('datepicker').show();
-        _self2.focus();
-      });
-    })
-  }
 
   handleCopy() {
     const parent = this.template.querySelector('c-user-preview-table');
@@ -1127,6 +949,7 @@ export default class ReportDetail extends LightningElement {
     }
   }
 
+  // Function to handle event when click on date input
   handleDateChange(event) {
     let convertedDate = event.detail;
     let dateType = event.target.dataset.key;
@@ -1148,6 +971,7 @@ export default class ReportDetail extends LightningElement {
       this.to_Date = formattedDate;
     }
   }
+  // Added by Raj
 
 
   handleApply() {

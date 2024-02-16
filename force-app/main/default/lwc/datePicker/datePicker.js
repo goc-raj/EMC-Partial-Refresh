@@ -1,3 +1,12 @@
+/**
+ * @Author: GetonCRM Solutions LLP
+ * @Description: This batch class is use for post a variable amount on monthly basis.
+ * @Modification logs
+ * ========================================================================================================================
+ * @Date: 06 February 2024 | Raj Joshi
+ * @description: Add placeHolder variable.
+ */
+
 import { LightningElement, api, track  } from 'lwc';
 import jQueryMinified from '@salesforce/resourceUrl/jQueryMinified';
 import datepicker from '@salesforce/resourceUrl/calendar';
@@ -8,6 +17,9 @@ export default class DatePicker extends LightningElement {
     @api date = '';
     @api isDisable = false;
     @api cmpClass = 'flat-container';
+    // Variable for store place holder
+    @api placeHolder = '';
+    // Added by Raj
 	isWidgetVisible = false;
     constructor() {
       super();

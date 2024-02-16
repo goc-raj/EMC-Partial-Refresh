@@ -1,3 +1,12 @@
+/**
+ * @Author: GetonCRM Solutions LLP
+ * @Description: This batch class is use for post a variable amount on monthly basis.
+ * @Modification logs
+ * ========================================================================================================================
+ * @Date: 11 January 2024 | Raj Joshi
+ * @description: New Component
+ */
+
 import { LightningElement, api } from 'lwc';
 import checkUserNameForCommunity from '@salesforce/apex/ForgotCommunityPasswordController.checkUserNameForCommunity';
 import resetPasswordForCommunity from '@salesforce/apex/ForgotCommunityPasswordController.resetPasswordForCommunity';
